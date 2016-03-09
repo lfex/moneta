@@ -1,3 +1,5 @@
+docs/build/
+docs/master/current/
 _build
 deps
 *.sublime-project
