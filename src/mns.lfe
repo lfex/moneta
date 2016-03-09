@@ -1,5 +1,7 @@
 (defmodule mns
   (export all))
 
-(defun my-adder (x y)
-  (+ x (+ y 1)))
+(include-lib "mnemosyne/include/mns.lfe")
+
+(defun noop ()
+  'noop)
