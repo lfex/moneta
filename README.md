@@ -48,7 +48,7 @@ Function names in the ``mns*`` modules have the Erlang underscores replaced with
 
 ## Documentation [&#x219F;](#contents)
 
-TBD
+Documentation for Mnemosyne is published to the [project docs site](http://lfex.github.io/mnemosyne/current/).
 
 
 ## License [&#x219F;](#contents)
