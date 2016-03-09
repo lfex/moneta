@@ -1,4 +1,4 @@
-(defmodule mnemosyne-util
+(defmodule mne-util
   (export all))
 
 (defun get-version ()

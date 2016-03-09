@@ -1,4 +1,4 @@
-(defmodule mnemosyne
+(defmodule mns
   (export all))
 
 (defun my-adder (x y)
