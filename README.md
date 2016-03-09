@@ -15,15 +15,18 @@
 * [Documentation](#documentation-)
 * [License](#license-)
 
+
 ## Introduction [&#x219F;](#contents)
 
-TBD
+This project offers very little over and above what is provided by the Erlang/OTP ``mnesia`` and ``qlc`` modules.
 
 
 ## Resources [&#x219F;](#contents)
 
-TBD
-
+* [Mnesia in LYSE](http://learnyousomeerlang.com/mnesia) - One of the best learning-Mnesia resources on the web. Or in print -- buy the book!
+* The official [Mnesia docs](http://erlang.org/doc/apps/mnesia/Mnesia_chap1.html)
+  * [mnesia module](http://erlang.org/doc/man/mnesia.html)
+  * [qlc module](http://erlang.org/doc/man/qlc.html)
 
 ## Documentation [&#x219F;](#contents)
 
