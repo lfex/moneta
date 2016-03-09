@@ -1,5 +1,5 @@
 %% -*- erlang -*-
-{application, 'mnemosyne',
+{application, mnemosyne,
  [
   %% A quick description of the application.
   {description, "A Lispy wrapper for Erlang Mnesia and QLC"},
