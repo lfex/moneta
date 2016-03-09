@@ -60,7 +60,7 @@ teardown-temp-repo:
 	@rm $(DOCS_DIR)/.git $(DOCS_DIR)/Gemfile.lock
 	@rm -rf $(DOCS_PROD_DIR)/.git $(DOCS_PROD_DIR)/*/.git
 
-publish: commit docs setup-temp-repo
+publish-docs: commit docs setup-temp-repo
 	@echo "\nPublishing docs ...\n"
 	@cd $(DOCS_PROD_DIR) && git push -f $(REPO) master:gh-pages
 	@make teardown-temp-repo
