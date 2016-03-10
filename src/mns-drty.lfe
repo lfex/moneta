@@ -1,7 +1,7 @@
-(defmodule mns-drty
+(defmodule mnt-drty
   (export all))
 
-(include-lib "mnemosyne/include/mns-drty.lfe")
+(include-lib "moneta/include/mnt-drty.lfe")
 
 (defun async (a b)
   (async-dirty a b))

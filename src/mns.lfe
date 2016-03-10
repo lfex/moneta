@@ -1,7 +1,7 @@
-(defmodule mns
+(defmodule mnt
   (export all))
 
-(include-lib "mnemosyne/include/mns.lfe")
+(include-lib "moneta/include/mnt.lfe")
 
 (defun noop ()
   'noop)

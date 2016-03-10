@@ -1,4 +1,4 @@
-PROJECT = mnemosyne
+PROJECT = moneta
 ROOT_DIR = $(shell pwd)
 REPO = $(shell git config --get remote.origin.url)
 DOCS_DIR = $(ROOT_DIR)/docs

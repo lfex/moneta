@@ -2,10 +2,10 @@
 
 *A Lispy wrapper for Erlang Mnesia and QLC*
 
-[![][mnemosyne-logo]][mnemosyne-logo-large]
+[![][moneta-logo]][moneta-logo-large]
 
-[mnemosyne-logo]: images/mnemosyne-y500.png
-[mnemosyne-logo-large]: images/mnemosyne-y2000.png
+[moneta-logo]: images/moneta-y500.png
+[moneta-logo-large]: images/moneta-y2000.png
 
 
 ## 1.1 Credit
@@ -86,7 +86,7 @@ In order to work through this tutorial, you will need the following:
 * Erlang installed on your system
 
 
-## 1.6 Using Mnemosyne
+## 1.6 Using Moneta
 
 The real differences are the modules and the additional utility functions. Module changes from the ``mnesia`` and ``qlc`` Erlang modules are as follows:
 

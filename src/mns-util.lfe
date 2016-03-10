@@ -1,9 +1,9 @@
-(defmodule mne-util
+(defmodule mnt-util
   (export all))
 
 (defun get-version ()
-  (lutil:get-app-version 'mnemosyne))
+  (lutil:get-app-version 'moneta))
 
 (defun get-versions ()
   (++ (lutil:get-versions)
-      `(#(mnemosyne ,(get-version)))))
+      `(#(moneta ,(get-version)))))

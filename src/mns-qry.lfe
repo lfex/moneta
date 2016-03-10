@@ -1,7 +1,7 @@
-(defmodule mns-qry
+(defmodule mnt-qry
   (export all))
 
-(include-lib "mnemosyne/include/mns-qry.lfe")
+(include-lib "moneta/include/mnt-qry.lfe")
 
 (defun noop ()
   'noop)

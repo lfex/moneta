@@ -1,9 +1,9 @@
-# mnemosyne
+# moneta
 
-[![][mnemosyne-logo]][mnemosyne-logo-large]
+[![][moneta-logo]][moneta-logo-large]
 
-[mnemosyne-logo]: resources/images/mnemosyne-y500.png
-[mnemosyne-logo-large]: resources/images/mnemosyne-y2000.png
+[moneta-logo]: resources/images/moneta-y500.png
+[moneta-logo-large]: resources/images/moneta-y2000.png
 
 *A Lispy wrapper for Erlang Mnesia and QLC*
 
@@ -48,7 +48,7 @@ Function names in the ``mns*`` modules have the Erlang underscores replaced with
 
 ## Documentation [&#x219F;](#contents)
 
-Documentation for Mnemosyne is published to the [project docs site](http://lfex.github.io/mnemosyne/current/).
+Documentation for moneta is published to the [project docs site](http://lfex.github.io/moneta/current/).
 
 
 ## License [&#x219F;](#contents)
