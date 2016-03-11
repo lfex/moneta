@@ -1,6 +1,7 @@
 PROJECT = moneta
 ROOT_DIR = $(shell pwd)
 REPO = $(shell git config --get remote.origin.url)
+LFE = _build/default/lib/lfe/bin/lfe
 DOCS_DIR = $(ROOT_DIR)/docs
 DOCS_BUILD_DIR = $(DOCS_DIR)/build
 DOCS_PROD_DIR = $(DOCS_DIR)/master
@@ -13,7 +14,10 @@ check:
 	@rebar3 eunit
 
 repl: compile
-	@lfe
+	@$(LFE)
+
+repl-db: compile
+	@$(LFE) -mnesia dir '"$(DB)"'
 
 shell:
 	@rebar3 shell

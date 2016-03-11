@@ -4,8 +4,8 @@
 
 [![][moneta-logo]][moneta-logo-large]
 
-[moneta-logo]: images/moneta-y500.png
-[moneta-logo-large]: images/moneta-y2000.png
+[moneta-logo]: images/mnemosyne-y500.png
+[moneta-logo-large]: images/mnemosyne-y2000.png
 
 
 ## 1.1 Credit

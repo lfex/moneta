@@ -1,32 +1,31 @@
 # Getting Started
 
-## Download the Tutorial Project
+## Download Moneta
 
-To help you get started more quickly, we've provided a repo with some helper
-tools in them. The rest of the tutorial will refer to this project. Here it
-is:
+> Download the project source code:
 
 ```bash
-$ git clone https://github.com/lfex/mnesia-tutorial.git mnesiatut
-$ cd mnesiatut
+$ git clone https://github.com/lfex/moneta
+$ cd moneta
 ```
 
-Next, let's get all the dependencies downloaded and built:
+> Next, get all the dependencies downloaded and built:
 
 ```bash
 $ make
 ```
 
-Okay, we're ready to go :-) You can start up an mnesia-ready LFE REPL by
-using a ``make`` target we provided in the ``Makefile`` for you. You need to
-pass it the path of the database you want to create or connect to, stored in
-an environment variable:
+The moneta project offers some convenience wrappers for the Erlang/OTP ``mnesia`` and ``qlc`` modules. To walk through the tutorial, you'll need to download the project source code.
+
+Once you have the code built, you're ready to go :-) Now you can start the LFE REPL, letting it know where to save your data.
+
+> Start LFE and let it know where you data will be saved:
 
 ```bash
 $ lfe -mnesia dir '"/tmp/funky"'
 ```
 
-This will dump you into the shell, ready to start dataing:
+> Once in the REPL, you're ready to start dataing:
 
 ```
 Erlang/OTP 17 [erts-6.2] [source] [64-bit] [smp:4:4] ...
@@ -47,26 +46,33 @@ Erlang/OTP 17 [erts-6.2] [source] [64-bit] [smp:4:4] ...
 
 ## First Run
 
-You're now in the LFE REPL, so let's create a new database on disk, start it
-up, and then create a table:
+> Create a schema, asking Moneta to start the Mnesia database for you automatically:
 
 ```cl
 > (mnt:create-schema #(start true))
 ok
+```
+
+> Now create a defaul table (with no provided table definition):
+
+```cl
 > (mnt:create-table 'funky)
 #(atomic ok)
 >
 ```
 
-We can take a look at our creation with this command:
+From the LFE REPL you can create a new database on disk, start Mnesia
+up, and then create a table. After creating the table, you can examine the table's metadata.
+
+> We can take a look at our creation with this command:
 
 ```cl
 > (mnt:info)
 ```
 
-Which should give you something like this:
+> Which should give you something like this:
 
-```erlang
+```
 ---> Processes holding locks <---
 ---> Processes waiting for locks <---
 ---> Participant transactions <---
@@ -94,9 +100,3 @@ ok
 ```
 
 You can quit the REPL now, as we'll restart it in the next section.
-
-
-### Next
-
-We've had a little taste, next we're going to spend some time getting to know
-Mnesia a little better.
