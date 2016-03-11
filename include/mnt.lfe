@@ -15,7 +15,7 @@
       (change-table-load-order 2)
       (change-table-majority 2)
       (clear-table 1)
-      (create-schema 1)
+      ;;(create-schema 1) - don't wrap; we manually wrap this one
       (create-table 2)
       (deactivate-checkpoint 1)
       (del-table-copy 2)
