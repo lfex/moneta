@@ -1,29 +1,4 @@
-(defmodule mnt
-  (export all)
-  (export-macro create-table))
-
-(include-lib "moneta/include/mnt.lfe")
-
-(defun create-schema ()
-  (create-schema (node)))
-
-(defun create-schema
-  ((#(start true))
-    (create-schema (node) #(start true)))
-  ((nodes) (when (is_list nodes))
-    (mnesia:create_schema nodes))
-  ((node) (when (is_atom node))
-    (mnesia:create_schema `(,node))))
-
-(defun create-schema
-  ((nodes #(start true)) (when (is_list nodes))
-    (mnesia:create_schema nodes)
-    (mnesia:start))
-  ((node #(start true)) (when (is_atom node))
-    (mnesia:create_schema `(,node))
-    (mnesia:start)))
-
-(defmacro create-table args
+(defmacro create-table
   "To use this macro, pass a 'raw' atom for the table name, not a quoted one --
   just like you would do when placing an atom in tuple data: #(...).
 
@@ -43,14 +18,22 @@
       'fields' variable.
     * The Mnesia 'create_table' function is then called, passing the table name
       as well as the obtained fields."
-  (case args
-    ((record-name)
-      `(mnt:create-table ,record-name '()))
-    ((record-name '())
+  ((record-table-name '())
+    `(create-table ,record-table-name (list (tuple 'type 'set))))
+  ((record-table-name table-defs)
+    (let* ((record-fields-macro-name (lutil-type:atom-cat
+                                      'fields- record-table-name))
+           (computed-record-fields `(,record-fields-macro-name)))
       `(mnesia:create_table
-        ',record-name '(#(type set))))
-    ((record-name table-defs)
-      `(mnesia:create_table
-        ',record-name
+        ',record-table-name
         (++ ,table-defs
-            (list (tuple 'attributes (mnt-util:get-fields ,record-name))))))))
+            (list (tuple 'attributes ,computed-record-fields)))))))
+
+(defmacro create-table (record-table-name)
+  `(create-table ,record-table-name (list (tuple 'type 'set))))
+
+(defun moneta-macros ()
+  "This is just a dummy function for display purposes when including from the
+  REPL (the last function loaded has its name printed in stdout).
+  This function needs to be the last one in this include."
+  'ok)

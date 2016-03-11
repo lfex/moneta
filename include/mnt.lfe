@@ -16,7 +16,7 @@
       (change-table-majority 2)
       (clear-table 1)
       ;;(create-schema 1) - don't wrap; we manually wrap this one
-      (create-table 2)
+      ;;(create-table 2) - don't wrap; we define a macro instead
       (deactivate-checkpoint 1)
       (del-table-copy 2)
       (del-table-index 2)

@@ -72,7 +72,7 @@ up, and then create a table. After creating the table, you can examine the table
 
 > Which should give you something like this:
 
-```erlang
+```
 ---> Processes holding locks <---
 ---> Processes waiting for locks <---
 ---> Participant transactions <---
@@ -100,9 +100,3 @@ ok
 ```
 
 You can quit the REPL now, as we'll restart it in the next section.
-
-
-### Next
-
-We've had a little taste, next we're going to spend some time getting to know
-Mnesia a little better.
