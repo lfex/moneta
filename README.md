@@ -8,7 +8,7 @@
 *A Lispy wrapper for Erlang Mnesia and QLC*
 
 
-##### Contents
+#### Contents
 
 * [Introduction](#introduction-)
 * [Modules](#modules-)
