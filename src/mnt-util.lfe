@@ -5,10 +5,10 @@
   (export-macro get-fields))
 
 (defun get-version ()
-  (lutil:get-app-version 'moneta))
+  (lr3-ver-util:get-app-version 'moneta))
 
 (defun get-versions ()
-  (++ (lutil:get-versions)
+  (++ (lr3-ver-util:get-versions)
       `(#(moneta ,(get-version)))))
 
 (defun make-fields-macro-name (record-name)
