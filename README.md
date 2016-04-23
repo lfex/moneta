@@ -2,8 +2,8 @@
 
 [![][moneta-logo]][moneta-logo-large]
 
-[moneta-logo]: resources/images/mnemosyne-y500.png
-[moneta-logo-large]: resources/images/mnemosyne-y2000.png
+[moneta-logo]: priv/images/mnemosyne-y500.png
+[moneta-logo-large]: priv/images/mnemosyne-y2000.png
 
 *A Lispy wrapper for Erlang Mnesia and QLC*
 
