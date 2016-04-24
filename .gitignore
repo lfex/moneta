@@ -1,7 +1,7 @@
 Mnesia*
 Company.DB
-docs/build/
 docs/master/current/
+docs/user-guide/build/
 _build
 deps
 *.sublime-project
