@@ -44,8 +44,16 @@
     * The Mnesia 'create_table' function is then called, passing the table name
       as well as the obtained fields."
   (case args
+    ;; Accept a quoted atom
+    (((cons _ `(,record-name)))
+      `(mnt:create-table ,record-name ()))
+    ;; Accept a non-quoted atom (usually what gets passed to macros)
     ((record-name)
-      `(mnt:create-table ,record-name '()))
+      `(mnt:create-table ,record-name ()))
+    ;; Accept a quoted atom + quoted empty list
+    (((cons _ `(,record-name)) (cons _ (())))
+      `(mnt:create-table ,record-name ()))
+    ;; Accept a non-quoted atom and unquoted empty list
     ((record-name '())
       `(mnesia:create_table
         ',record-name '(#(type set))))
