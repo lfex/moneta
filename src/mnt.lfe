@@ -57,8 +57,14 @@
     ((record-name '())
       `(mnesia:create_table
         ',record-name '(#(type set))))
+    ;; Accept a quoted atom and quoted table definition list
+    (((cons _ `(,record-name)) (cons _ `(,table-defs)))
+      `(mnesia:create_table
+        ',record-name
+        (++ ',table-defs
+            (list (tuple 'attributes (mnt-util:get-fields ',record-name))))))
     ((record-name table-defs)
       `(mnesia:create_table
         ',record-name
-        (++ ,table-defs
-            (list (tuple 'attributes (mnt-util:get-fields ,record-name))))))))
+        (++ ',table-defs
+            (list (tuple 'attributes (mnt-util:get-fields ',record-name))))))))
