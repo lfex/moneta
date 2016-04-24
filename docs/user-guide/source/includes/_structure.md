@@ -15,13 +15,7 @@ $ lfe -mnesia dir '"./Company.DB"'
 ok
 ```
 
-We've had a quick taste of Mnesia, and what some of the calls look like in LFE.
-Next we're going to tackle a bit more heady stuff: tables and relationships.
-
-After you have quite from your previous LFE REPL, restart using a different database name and then create a default schema, auto-starting Mnesia.
-
-Then pull in the example code that defines our tables, adding them to the
-Mnesia schema we just created:
+> Now pull in the convenience functions for setting our tables up:
 
 ```cl
 > (slurp "examples/structure.lfe")
@@ -29,12 +23,15 @@ Mnesia schema we just created:
 >
 ```
 
+We've had a quick taste of Mnesia, and what some of the calls look like in LFE.
+Next we're going to tackle a bit more heady stuff: tables and relationships.
+
+After you have quite from your previous LFE REPL, restart using a different database name and then create a default schema, auto-starting Mnesia. Then you'll pull in the example code that defines our tables, adding them to the Mnesia schema we just created.
+
+
 ## Records as Tables
 
-The ``structure`` example module includes LFE records that act as our table definitions,
-as well as a macro that lets us create Mnesia tables with almost no boilerplate.
-
-The following records are defined in ``examples/tables.lfe``:
+> The following records are defined in ``examples/tables.lfe``:
 
 ```cl
 (defrecord employee
@@ -66,6 +63,9 @@ The following records are defined in ``examples/tables.lfe``:
   project-name)
 ```
 
+The ``structure`` example module includes LFE records that act as our table definitions,
+as well as a macro that lets us create Mnesia tables with almost no boilerplate.
+
 These records (tables) are taken from the example given in the
 [Erlang Mnesia tutorial](http://www.erlang.org/doc/apps/mnesia/Mnesia_chap2.html#id63101) which also gives this entity diagram for their proposed
  "Company" database:
@@ -75,20 +75,16 @@ These records (tables) are taken from the example given in the
 
 ### 3.3 Creating Our Tables
 
-In the ``examples/structure.lfe`` module which we have just imported, some utility
-functions are defined which will lets us easily create tables in Mnesia based
-on the records defined in the ``examples/tables.lfe`` file. Of particular
-interest right now is the ``(init)`` function; let's call it:
+> Initialize all the tables:
 
 ```cl
 > (init)
 #(ok
   (#(create-set-tables (#(atomic ok) #(atomic ok) #(atomic ok) #(atomic ok)))
    #(create-bag-tables (#(atomic ok) #(atomic ok)))))
->
 ```
 
-This just created all our Mnesia tables for us. If we run it again, we'll see
+> This just created all our Mnesia tables for us. If we run it again, we'll see
 errors indicating that the tables have already been created:
 
 ```cl
@@ -105,8 +101,12 @@ errors indicating that the tables have already been created:
 >
 ```
 
-As you may guess from the output of that second call, under the covers, the
-``init`` function calls a couple of utility functions defined in
+In the ``examples/structure.lfe`` module which we have just imported, some utility
+functions are defined which will lets us easily create tables in Mnesia based
+on the records defined in the ``examples/tables.lfe`` file. Of particular
+interest right now is the ``(init)`` function; let's call it:
+
+The ``init`` function calls a couple of utility functions defined in
 ``examples/structure.lfe`` :
 
 * ``(create-set-tables)``, and
@@ -118,13 +118,13 @@ boilerplate code. This macro actually calls another macro that is generated
 -- by LFE -- for each record (one that gets a list of all the fields for a
 given record).
 
-Next, let's re-run that ``info`` function we saw in the previous section:
+> Next, let's re-run the ``info`` function we saw in the previous section:
 
 ```cl
 > (mnt:info)
 ```
 
-The output of that function will be very similar to what we saw in the
+The output of the ``info`` function will be very similar to what we saw in the
 previous section. However, do note that our new tables are reported in the
 "Active tables" section:
 
@@ -140,9 +140,7 @@ employee       : with 0        records occupying 305      words of mem
 ...
 ```
 
-If you would like to check up on the tables created above, you can use the
-``table_info`` function to pull out certain data. For instance, here's how
-you find what backend type is being used for any given table:
+> Here's how you find what backend type is being used for any given table:
 
 ```cl
 > (mnt:table-info 'employee 'type)
@@ -152,7 +150,7 @@ bag
 >
 ```
 
-If you're interested in seeing *all* the details of any given table, you can
+> If you're interested in seeing *all* the details of any given table, you can
 do so with the ``'all`` parameter:
 
 ```cl
@@ -207,7 +205,7 @@ do so with the ``'all`` parameter:
 >
 ```
 
+If you would like to check up on the tables created above, you can use the
+``table-info`` function to pull out certain data.
+
 Next up, we'll start inserting some data.
-
-
-
