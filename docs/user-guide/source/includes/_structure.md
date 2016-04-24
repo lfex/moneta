@@ -67,8 +67,7 @@ The following records are defined in ``examples/tables.lfe``:
 ```
 
 These records (tables) are taken from the example given in the
-<a href="http://www.erlang.org/doc/apps/mnesia/Mnesia_chap2.html#id63101">Erlang
- Mnesia tutorial</a> which also gives this entity diagram for their proposed
+[Erlang Mnesia tutorial](http://www.erlang.org/doc/apps/mnesia/Mnesia_chap2.html#id63101) which also gives this entity diagram for their proposed
  "Company" database:
 
 <img src="http://www.erlang.org/doc/apps/mnesia/company.gif" />
@@ -76,9 +75,9 @@ These records (tables) are taken from the example given in the
 
 ### 3.3 Creating Our Tables
 
-In the ``src/structure.lfe`` module which we have just imported, some utility
+In the ``examples/structure.lfe`` module which we have just imported, some utility
 functions are defined which will lets us easily create tables in Mnesia based
-on the records defined in the ``include/tables.lfe`` file. Of particular
+on the records defined in the ``examples/tables.lfe`` file. Of particular
 interest right now is the ``(init)`` function; let's call it:
 
 ```cl
@@ -107,10 +106,11 @@ errors indicating that the tables have already been created:
 ```
 
 As you may guess from the output of that second call, under the covers, the
-``init`` function calls a couple of utility functions:
+``init`` function calls a couple of utility functions defined in
+``examples/structure.lfe`` :
 
-* ``(structure:create-set-tables)``, and
-* ``(structure:create-bag-tables)``
+* ``(create-set-tables)``, and
+* ``(create-bag-tables)``
 
 These, in turn, call a macro we created to make table-creation much easier.
 The custom macro alleviates the dev from having to write tedious and repetitive
@@ -121,7 +121,7 @@ given record).
 Next, let's re-run that ``info`` function we saw in the previous section:
 
 ```cl
-> (mnesia:info)
+> (mnt:info)
 ```
 
 The output of that function will be very similar to what we saw in the
@@ -145,9 +145,9 @@ If you would like to check up on the tables created above, you can use the
 you find what backend type is being used for any given table:
 
 ```cl
-> (mnesia:table_info 'employee 'type)
+> (mnt:table-info 'employee 'type)
 set
-> (mnesia:table_info 'in-project 'type)
+> (mnt:table-info 'in-project 'type)
 bag
 >
 ```
@@ -156,7 +156,7 @@ If you're interested in seeing *all* the details of any given table, you can
 do so with the ``'all`` parameter:
 
 ```cl
-> (mnesia:table_info 'employee 'all)
+> (mnt:table-info 'employee 'all)
 (#(access_mode read_write)
 #(active_replicas (nonode@nohost))
 #(all_nodes (nonode@nohost))
