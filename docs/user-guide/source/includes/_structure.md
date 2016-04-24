@@ -73,7 +73,7 @@ These records (tables) are taken from the example given in the
 <img src="http://www.erlang.org/doc/apps/mnesia/company.gif" />
 
 
-### 3.3 Creating Our Tables
+## Creating Our Tables
 
 > Initialize all the tables:
 
@@ -117,6 +117,9 @@ The custom macro alleviates the dev from having to write tedious and repetitive
 boilerplate code. This macro actually calls another macro that is generated
 -- by LFE -- for each record (one that gets a list of all the fields for a
 given record).
+
+
+## Table Metadata
 
 > Next, let's re-run the ``info`` function we saw in the previous section:
 
