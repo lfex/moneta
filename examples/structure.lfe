@@ -1,18 +1,17 @@
 (defmodule structure
   (export all))
 
-(include-lib "moneta/include/mnt.lfe")
 (include-file "examples/tables.lfe")
 
 (defun create-set-tables ()
-  `(,(create-table 'employee)
-    ,(create-table 'department)
-    ,(create-table 'project)
-    ,(create-table 'in-department)))
+  `(,(mnt:create-table 'employee)
+    ,(mnt:create-table 'department)
+    ,(mnt:create-table 'project)
+    ,(mnt:create-table 'in-department)))
 
 (defun create-bag-tables ()
-  `(,(create-table 'manager '(#(type bag)))
-    ,(create-table 'in-project '(#(type bag)))))
+  `(,(mnt:create-table 'manager '(#(type bag)))
+    ,(mnt:create-table 'in-project '(#(type bag)))))
 
 (defun get-status (list-of-tuples)
   (case (lists:dropwhile (lambda (x) (== (element 2 x) 'ok))
