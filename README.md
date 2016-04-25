@@ -61,7 +61,13 @@ Function names in the ``mnt*`` modules have the Erlang underscores replaced with
 ## License [&#x219F;](#contents)
 
 ```
-Copyright © 2016 Duncan McGreggor
+Copyright © 2014-2016 Duncan McGreggor
 
 Distributed under the Apache License, Version 2.0.
+```
+
+Original Mnesia documentation which the Moneta tutorial is based upon:
+
+```
+Copyright © 1997-2016 Ericsson AB. All Rights Reserved.
 ```
