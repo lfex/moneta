@@ -1,4 +1,4 @@
-# Structure
+# DBs and Tables
 
 ## Starting Again
 
@@ -15,18 +15,10 @@ $ lfe -mnesia dir '"./Company.DB"'
 ok
 ```
 
-> Now pull in the convenience functions for setting our tables up:
-
-```cl
-> (slurp "examples/structure.lfe")
-#(ok structure)
->
-```
-
 We've had a quick taste of Mnesia, and what some of the calls look like in LFE.
 Next we're going to tackle a bit more heady stuff: tables and relationships.
 
-After you have quite from your previous LFE REPL, restart using a different database name and then create a default schema, auto-starting Mnesia. Then you'll pull in the example code that defines our tables, adding them to the Mnesia schema we just created.
+After you have quit from your previous LFE REPL, restart using the ``Company.DB`` database name and then create a default schema, passing the auto-start option to Mnesia.
 
 
 ## Records as Tables
@@ -63,7 +55,23 @@ After you have quite from your previous LFE REPL, restart using a different data
   project-name)
 ```
 
-The ``structure`` example module includes LFE records that act as our table definitions,
+> Pull in these table definitions:
+
+```cl
+>(include-file "examples/tables.lfe")
+loaded-example-tables
+```
+
+> Define your tables:
+
+```cl
+> (set set-tables '(employee department project in-department))
+(employee department project in-department)
+> (set bag-tables '(manager in-project))
+(manager in-project)
+```
+
+The ``tables.lfe`` example include defines LFE records that act as our table definitions (and thus all the convenient record macros that come with those). These are only definitions, though -- representing a table schema -- not the actual tables themselves. We need to create those.
 as well as a macro that lets us create Mnesia tables with almost no boilerplate.
 
 These records (tables) are taken from the example given in the
@@ -75,48 +83,30 @@ These records (tables) are taken from the example given in the
 
 ## Creating Our Tables
 
-> Initialize all the tables:
+> Create the tables with the appropriate table specs:
 
 ```cl
-> (init)
-#(ok
-  (#(create-set-tables (#(atomic ok) #(atomic ok) #(atomic ok) #(atomic ok)))
-   #(create-bag-tables (#(atomic ok) #(atomic ok)))))
+> (mnt:create-tables set-tables '(#(type set)))
+(#(atomic ok) #(atomic ok) #(atomic ok) #(atomic ok))
+> (mnt:create-tables bag-tables '(#(type bag)))
+(#(atomic ok) #(atomic ok))
 ```
 
 > This just created all our Mnesia tables for us. If we run it again, we'll see
 errors indicating that the tables have already been created:
 
 ```cl
-> (init)
-#(error
-  (#(create-set-tables
-     (#(aborted #(already_exists employee))
-      #(aborted #(already_exists department))
-      #(aborted #(already_exists project))
-      #(aborted #(already_exists in-department))))
-   #(create-bag-tables
-     (#(aborted #(already_exists manager))
-      #(aborted #(already_exists in-project))))))
->
+> (mnt:create-tables set-tables '(#(type set)))
+(#(aborted #(already_exists employee))
+ #(aborted #(already_exists department))
+ #(aborted #(already_exists project))
+ #(aborted #(already_exists in-department)))
+> (mnt:create-tables bag-tables '(#(type bag)))
+(#(aborted #(already_exists manager))
+ #(aborted #(already_exists in-project)))
 ```
 
-In the ``examples/structure.lfe`` module which we have just imported, some utility
-functions are defined which will lets us easily create tables in Mnesia based
-on the records defined in the ``examples/tables.lfe`` file. Of particular
-interest right now is the ``(init)`` function; let's call it:
-
-The ``init`` function calls a couple of utility functions defined in
-``examples/structure.lfe`` :
-
-* ``(create-set-tables)``, and
-* ``(create-bag-tables)``
-
-These, in turn, call a macro we created to make table-creation much easier.
-The custom macro alleviates the dev from having to write tedious and repetitive
-boilerplate code. This macro actually calls another macro that is generated
--- by LFE -- for each record (one that gets a list of all the fields for a
-given record).
+When using Mnesia directly, there is a great deal of boilerplate code that developers need to write in order to create tables. Fortunately, Moneta provides several macros and functions that does this for you, making table-creation as intuitive as possible:  all you need to do is provide table names and table specs.
 
 
 ## Table Metadata
@@ -151,6 +141,13 @@ set
 > (mnt:table-info 'in-project 'type)
 bag
 >
+```
+
+> You can also get table metadata for several tables at once:
+
+```cl
+> (mnt:tables-info (++ set-tables bag-tables) 'type)
+(set set set set bag bag)
 ```
 
 > If you're interested in seeing *all* the details of any given table, you can
