@@ -48,7 +48,7 @@ Function names in the ``mnt*`` modules have the Erlang underscores replaced with
 
 ## Documentation [&#x219F;](#contents)
 
-Documentation for moneta is published to the [project docs site](http://lfex.github.io/moneta/current/).
+Documentation for moneta is published to the [project docs site](http://lfex.github.io/moneta/).
 
 
 ## License [&#x219F;](#contents)
