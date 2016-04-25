@@ -115,6 +115,8 @@ When using Mnesia directly, there is a great deal of boilerplate code that devel
 
 ```cl
 > (mnt:info)
+```
+```
 ...
 ---> Active tables <---
 in-project     : with 0        records occupying 305      words of mem
