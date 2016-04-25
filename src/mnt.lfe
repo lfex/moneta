@@ -1,7 +1,9 @@
 (defmodule mnt
   (export all)
-  (export-macro create-table))
+  (export-macro create-table
+                create-tables))
 
+(include-lib "clj/include/compose.lfe")
 (include-lib "moneta/include/mnt.lfe")
 
 (defun create-schema ()
@@ -68,3 +70,46 @@
         ',record-name
         (++ ',table-defs
             (list (tuple 'attributes (mnt-util:get-fields ',record-name))))))))
+
+(defun create-table-env (table-name env)
+  "A function version of the create-table macro.
+
+  The same as ``(create-table-env table-name '() env)``.
+
+  Note that since this function calls a table record macro, it requires
+  access to the environment where the table macros were compiled."
+  (create-table-env table-name '() env))
+
+(defun create-table-env (table-name table-defs env)
+  "A function version of the create-table macro.
+
+  Note that since this function calls a table record macro, it requires
+  access to the environment where the table macros were compiled."
+  (->> table-name
+       (funcall (lambda (x) `(mnt-util:get-fields ,x)))
+       (funcall (lambda (x) (eval x env)))
+       (tuple 'attributes)
+       (list)
+       (++ table-defs)
+       (mnesia:create_table table-name)))
+
+(defun create-tables-env (table-names env)
+  "A function that creates tables of the same type in one go.
+
+  The same as ``(create-tables-env table-names '() env)``."
+  (create-tables-env table-names '() env))
+
+(defun create-tables-env (table-names table-defs env)
+  "A function that creates tables of the same type in one go."
+  (lists:map (lambda (x)
+               (mnt:create-table-env x table-defs env))
+             table-names))
+
+(defmacro create-tables (table-names table-defs)
+  "A macro-version of the ``#create-tables-env/2,3`` that automatically
+  provides the executing environment."
+  `(mnt:create-tables-env ,table-names ,table-defs $ENV))
+
+(defun tables-info (table-names key)
+  "Get table metadata for more than one table at once."
+  (lists:map (lambda (x) (mnt:table-info x key)) table-names))
