@@ -66,7 +66,7 @@ Copyright © 2014-2016 Duncan McGreggor
 Distributed under the Apache License, Version 2.0.
 ```
 
-Original Mnesia documentation which the Moneta tutorial is based upon:
+Original Mnesia documentation upon which the Moneta tutorial is based:
 
 ```
 Copyright © 1997-2016 Ericsson AB. All Rights Reserved.
