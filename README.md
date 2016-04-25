@@ -28,7 +28,10 @@ This project is mostly a wrapper around the Erlang/OTP ``mnesia`` and ``qlc`` mo
 
 ## Documentation [&#x219F;](#contents)
 
-Documentation for moneta is published to the [project docs site](http://lfex.github.io/moneta/).
+Documentation for Moneta is available in the following forms:
+
+* [Moneta Tutorial](http://lfex.github.io/moneta/current/user-guide/)
+* [Moneta API Reference](http://lfex.github.io/moneta/current/api/)
 
 
 ## Modules [&#x219F;](#contents)
