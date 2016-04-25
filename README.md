@@ -19,7 +19,11 @@
 
 ## Introduction [&#x219F;](#contents)
 
-This project offers very little over and above what is provided by the Erlang/OTP ``mnesia`` and ``qlc`` modules.
+This project is mostly a wrapper around the Erlang/OTP ``mnesia`` and ``qlc`` modules. That being said, it does provide the additional following benefits:
+
+* functions and macros for easily creating tables
+* additional convenience functions
+* Lisp-friendly wrapper functions for Mnesia functions (i.e., hyphens!)
 
 
 ## Modules [&#x219F;](#contents)
