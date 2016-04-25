@@ -11,9 +11,9 @@
 #### Contents
 
 * [Introduction](#introduction-)
+* [Documentation](#documentation-)
 * [Modules](#modules-)
 * [Resources](#resources-)
-* [Documentation](#documentation-)
 * [License](#license-)
 
 
@@ -24,6 +24,11 @@ This project is mostly a wrapper around the Erlang/OTP ``mnesia`` and ``qlc`` mo
 * functions and macros for easily creating tables
 * additional convenience functions
 * Lisp-friendly wrapper functions for Mnesia functions (i.e., hyphens!)
+
+
+## Documentation [&#x219F;](#contents)
+
+Documentation for moneta is published to the [project docs site](http://lfex.github.io/moneta/).
 
 
 ## Modules [&#x219F;](#contents)
@@ -48,11 +53,6 @@ Function names in the ``mnt*`` modules have the Erlang underscores replaced with
 * The official [Mnesia docs](http://erlang.org/doc/apps/mnesia/Mnesia_chap1.html)
   * [mnesia module](http://erlang.org/doc/man/mnesia.html)
   * [qlc module](http://erlang.org/doc/man/qlc.html)
-
-
-## Documentation [&#x219F;](#contents)
-
-Documentation for moneta is published to the [project docs site](http://lfex.github.io/moneta/).
 
 
 ## License [&#x219F;](#contents)
