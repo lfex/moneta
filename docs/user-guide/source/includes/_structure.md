@@ -58,7 +58,7 @@ After you have quit from your previous LFE REPL, restart using the ``Company.DB`
 > Pull in these table definitions:
 
 ```cl
->(include-file "examples/tables.lfe")
+> (include-file "examples/tables.lfe")
 loaded-example-tables
 ```
 
@@ -115,13 +115,6 @@ When using Mnesia directly, there is a great deal of boilerplate code that devel
 
 ```cl
 > (mnt:info)
-```
-
-The output of the ``info`` function will be very similar to what we saw in the
-previous section. However, do note that our new tables are reported in the
-"Active tables" section:
-
-```
 ...
 ---> Active tables <---
 in-project     : with 0        records occupying 305      words of mem
@@ -204,6 +197,10 @@ do so with the ``'all`` parameter:
 #(...)...)
 >
 ```
+
+The output of the ``info`` function will be very similar to what we saw in the
+previous section. However, do note that our new tables are reported in the
+"Active tables" section:
 
 If you would like to check up on the tables created above, you can use the
 ``table-info`` function to pull out certain data.
