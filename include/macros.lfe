@@ -32,7 +32,7 @@
 (defmacro create-table (record-table-name)
   `(create-table ,record-table-name (list (tuple 'type 'set))))
 
-(defun moneta-macros ()
+(defun --loaded-moneta-macros-- ()
   "This is just a dummy function for display purposes when including from the
   REPL (the last function loaded has its name printed in stdout).
   This function needs to be the last one in this include."
