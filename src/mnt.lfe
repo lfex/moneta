@@ -3,7 +3,7 @@
   (export-macro create-table
                 create-tables))
 
-(include-lib "clj/include/compose.lfe")
+(include-lib "lfe/include/clj.lfe")
 (include-lib "moneta/include/mnt.lfe")
 
 (defun create-schema ()
@@ -113,3 +113,11 @@
 (defun tables-info (table-names key)
   "Get table metadata for more than one table at once."
   (lists:map (lambda (x) (mnt:table-info x key)) table-names))
+
+;;; Metadata
+
+(defun version ()
+  (mnt-vsn:get))
+
+(defun versions ()
+  (mnt-vsn:all))
