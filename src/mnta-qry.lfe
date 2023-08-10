@@ -1,7 +1,7 @@
-(defmodule mnt-qry
+(defmodule mnta-qry
   (export all))
 
-(include-lib "moneta/include/mnt-qry.lfe")
+(include-lib "moneta/include/mnta-qry.lfe")
 
 (defun show-data (table-name)
   (mnesia:transaction

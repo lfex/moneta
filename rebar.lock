@@ -1,16 +1,14 @@
-[{<<"clj">>,
-  {git,"git://github.com/lfex/clj.git",
-       {ref,"1be3d8fedaf338df7ae24f688b12ef5754fb235e"}},
-  1},
- {<<"kla">>,
-  {git,"git://github.com/lfex/kla.git",
-       {ref,"c3a4cb86f76982c40dcd640768db7056bb8d5df7"}},
-  2},
- {<<"lfe-version">>,
-  {git,"https://github.com/lfe-rebar3/version.git",
-       {ref,"76919956b78112b86bbe5972ffc136741d708f10"}},
-  3},
- {<<"lutil">>,
-  {git,"git://github.com/lfex/lutil.git",
-       {ref,"81a2e5c2fdbc58e987cf4010d9a0537bc0556572"}},
-  0}].
+{"1.2.0",
+[{<<"kla">>,{pkg,<<"kla">>,<<"0.9.1">>},0},
+ {<<"lfe">>,{pkg,<<"lfe">>,<<"2.1.2">>},0},
+ {<<"lutil">>,{pkg,<<"lutil">>,<<"0.14.0">>},0}]}.
+[
+{pkg_hash,[
+ {<<"kla">>, <<"2E131B2137137B48C7E974C82C8DB32554FDF0D93129AA98379973AA03F70430">>},
+ {<<"lfe">>, <<"9A14B5056761C63EEA5A3040E0FD1A326276CFE40F3B952E7305FED45341BF6F">>},
+ {<<"lutil">>, <<"C5AA15D1216ABD34AA8106E58130963FDE7963CF9327ED61D286735D1BDADD6E">>}]},
+{pkg_hash_ext,[
+ {<<"kla">>, <<"244656D7D740CE50C458EA98435ADA74B0FF0465742BE4E0416D7BA3D5BA0555">>},
+ {<<"lfe">>, <<"E717466A203711FDF47A2E2144990EDB52B207D40F6D6168BADD05F76EEC04AD">>},
+ {<<"lutil">>, <<"4F849E7003C5352997BF62E030C805ED6AD7BA09D8D6BCD3B55F5FE19353AD9C">>}]}
+].

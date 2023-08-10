@@ -1,4 +1,4 @@
-(defmodule mnt-tests
+(defmodule mnta-tests
   (behaviour ltest-system)
   (export all))
 
@@ -10,7 +10,7 @@
   data)
 
 (deftest create-schema
-  (is-equal 'ok (mnt:create-schema #(start true))))
+  (is-equal 'ok (mnta:create-schema #(start true))))
 
 ; (deftest create-table
-;   (is-equal #(atomic ok) (mnt:create-table 'test-table)))
+;   (is-equal #(atomic ok) (mnta:create-table 'test-table)))

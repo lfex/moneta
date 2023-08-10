@@ -1,7 +1,7 @@
-(defmodule mnt-drty
+(defmodule mnta-drty
   (export all))
 
-(include-lib "moneta/include/mnt-drty.lfe")
+(include-lib "moneta/include/mnta-drty.lfe")
 
 (defun async (a b)
   (async-dirty a b))

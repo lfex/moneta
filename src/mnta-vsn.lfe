@@ -1,4 +1,4 @@
-(defmodule mnt-vsn
+(defmodule mnta-vsn
   (export
    (get 0)
    (all 0)))

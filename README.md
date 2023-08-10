@@ -43,11 +43,11 @@ The Erlang namespaces for the modules (ab)used by this project are the following
 
 These are accessible via those same module names in LFE, or using this library, from the following:
 
-* ``mnt`` - holds alll the ``mnesia`` functions besides the dirty ones
-* ``mnt-drty`` - split dirty functions into their own module ("dirty" operations are short-cuts that bypass much of the processing and increase the speed of the transaction)
-* ``mnt-qry`` - ``qlc`` alias; longer to type than ``qlc``, but provides some nice visual context when scanning code
+* ``mnta`` - holds alll the ``mnesia`` functions besides the dirty ones
+* ``mnta-drty`` - split dirty functions into their own module ("dirty" operations are short-cuts that bypass much of the processing and increase the speed of the transaction)
+* ``mnta-qry`` - ``qlc`` alias; longer to type than ``qlc``, but provides some nice visual context when scanning code
 
-Function names in the ``mnt*`` modules have the Erlang underscores replaced with LFE hyphens. This work is done via the LFE [kla](https://github.com/lfex/kla) library.
+Function names in the ``mnta*`` modules have the Erlang underscores replaced with LFE hyphens. This work is done via the LFE [kla](https://github.com/lfex/kla) library.
 
 
 ## Resources [&#x219F;](#contents)
