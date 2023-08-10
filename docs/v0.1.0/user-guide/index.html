@@ -1,0 +1,515 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Moneta Tutorial</title>
+
+    <link href="css/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="css/print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      <script src="js/all.js" type="text/javascript"></script>
+
+      <script>
+        $(function() {
+          setupLanguages([null]);
+        });
+      </script>
+  </head>
+
+  <body class="index">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <div class="content"><span class="title">Moneta Tutorial</span></div>
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <div class="content">
+        <div class="logo">
+        </div>
+        <span class="title">Moneta Tutorial</span></div>
+        <div class="lang-selector">
+              <a href="#" data-language-name=""></a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/lfex/moneta/'>View the source</a></li>
+            <li><a href='https://lfex.github.io/moneta/current/api'>Moneta API Reference</a></li>
+            <li><a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        
+          <h1 id="introduction">Introduction</h1>
+
+<p><em>A Lispy wrapper for Erlang Mnesia and QLC</em></p>
+
+<p><a href="images/mnemosyne-y2000.png"><img src="images/mnemosyne-y500.png" /></a></p>
+
+<h2 id="credit">Credit</h2>
+
+<p>This tutorial is adapted (massively copied) from the <a href="http://docs.lfe.io/tutorials/mnesia/1.html">LFE Mnesia Tutorial</a>, which in turn was borrowed from the Erlang/OTP <a href="http://www.erlang.org/doc/apps/mnesia/Mnesia_chap1.html">Mnesia Book</a> on the Erlang docs site.</p>
+
+<h2 id="about-mnesia">About Mnesia</h2>
+
+<p>Mnesia is a distributed Database Management System, appropriate for
+telecommunications applications and other Erlang applications which require
+continuous operation and soft real-time properties.</p>
+
+<p>Mnesia is designed with requirements like the following in mind:</p>
+
+<ul>
+<li>Fast real-time key/value lookup</li>
+<li>Complicated non real-time queries mainly for operation and maintenance</li>
+<li>Distributed data due to distributed applications</li>
+<li>High fault tolerance</li>
+<li>Dynamic re-configuration</li>
+<li>Complex objects</li>
+</ul>
+
+<p>Due to its focus on telecommunications applications, Mnesia combines many
+concepts found in traditional databases, such as transactions and queries with
+concepts such as very fast real-time operations, configurable degree of fault
+tolerance (by means of replication) and the ability to reconfigure the system
+without stopping or suspending it.</p>
+
+<p>Mnesia is also interesting due to its tight coupling to the programming
+language Erlang/LFE, thus almost turning Erlang/LFE into a database programming
+language.</p>
+
+<h2 id="add-on-applications">Add-on Applications</h2>
+
+<p>The following add-ons can be used in conjunction with Mnesia to produce
+specialized functions which enhance the operational ability of Mnesia:</p>
+
+<ul>
+<li>QLC has the ability to optimize the query compiler for the Mnesia Database
+Management System, essentially making the DBMS more efficient.</li>
+<li>QLC, can be used as a database programming language for Mnesia. It includes a
+notation called &ldquo;list comprehensions&rdquo; and can be used to make complex
+database queries over a set of tables.</li>
+<li>Mnesia Session is an interface for the Mnesia Database Management System</li>
+<li>Mnesia Session enables access to the Mnesia DBMS from foreign programming
+languages (i.e. other languages than Erlang/LFE).</li>
+</ul>
+
+<h2 id="when-to-use-mnesia">When to Use Mnesia</h2>
+
+<p>Use Mnesia with the following types of applications:</p>
+
+<ul>
+<li>Applications that need to replicate data.</li>
+<li>Applications that perform complicated searches on data.</li>
+<li>Applications that need to use atomic transactions to update several records
+simultaneously.</li>
+<li>Applications that use soft real-time characteristics.</li>
+</ul>
+
+<p>On the other hand, Mnesia may not be appropriate with the following types of
+applications:</p>
+
+<ul>
+<li>Programs that process plain text or binary data files</li>
+<li>Applications that merely need a look-up dictionary which can be stored to
+disc can utilize the standard library module dets, which is a disc based
+version of the module ets.</li>
+<li>Applications which need disc logging facilities can utilize the module
+disc_log by preference.</li>
+<li>Not suitable for hard real time systems.</li>
+</ul>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>In order to work through this tutorial, you will need the following:</p>
+
+<ul>
+<li><code class="prettyprint">git</code></li>
+<li><code class="prettyprint">make</code></li>
+<li><code class="prettyprint">rebar3</code></li>
+<li>Erlang installed on your system</li>
+</ul>
+
+<h2 id="using-moneta">Using Moneta</h2>
+
+<p>The real differences are the modules and the additional utility functions. Module changes from the <code class="prettyprint">mnesia</code> and <code class="prettyprint">qlc</code> Erlang modules are as follows:</p>
+
+<ul>
+<li><code class="prettyprint">mns</code> - holds alll the <code class="prettyprint">mnesia</code> functions besides the dirty ones</li>
+<li><code class="prettyprint">mns-drty</code> - split dirty functions into their own module (&ldquo;dirty&rdquo; operations are short-cuts that bypass much of the processing and increase the speed of the transaction)</li>
+<li><code class="prettyprint">mns-qry</code> - <code class="prettyprint">qlc</code> alias; longer to type than <code class="prettyprint">qlc</code>, but provides some nice visual context when scanning code</li>
+</ul>
+
+<p>The utility functions that have been added are as follows:</p>
+
+<p>TBD</p>
+
+<h2 id="conventions">Conventions</h2>
+
+<p>We use styled call-outs to provide immediate visual cues about the nature of
+the information being shared.</p>
+
+<p>These are as follows:</p>
+
+<aside class="info">
+This style indicates useful information, background, or other insights.
+</aside>
+
+<aside class="success">
+This style indicates a best practice, good usage, and other tips for success.
+</aside>
+
+<aside class="caution">
+This style indicates one should use caution or that behaviour may not be as
+expected
+</aside>
+
+<aside class="danger">
+This style indicates information that could cause errors if ignored.
+</aside>
+
+          <h1 id="getting-started">Getting Started</h1>
+
+<h2 id="download-moneta">Download Moneta</h2>
+
+<blockquote>
+<p>Download the project source code:</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="gp">$ </span>git clone https://github.com/lfex/moneta
+<span class="gp">$ </span><span class="nb">cd </span>moneta
+</code></pre>
+
+<blockquote>
+<p>Next, get all the dependencies downloaded and built:</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="gp">$ </span>make
+</code></pre>
+
+<p>The moneta project offers some convenience wrappers for the Erlang/OTP <code class="prettyprint">mnesia</code> and <code class="prettyprint">qlc</code> modules. To walk through the tutorial, you&rsquo;ll need to download the project source code.</p>
+
+<p>Once you have the code built, you&rsquo;re ready to go :-) Now you can start the LFE REPL, letting it know where to save your data.</p>
+
+<blockquote>
+<p>Start LFE and let it know where you data will be saved:</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="gp">$ </span>lfe -mnesia dir <span class="s1">'"/tmp/funky"'</span>
+</code></pre>
+
+<blockquote>
+<p>Once in the REPL, you&rsquo;re ready to start dataing:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>Erlang/OTP 17 [erts-6.2] [source] [64-bit] [smp:4:4] ...
+
+   ..-~.~_~--..
+  (      \\    )     |   A Lisp-2+ on the Erlang VM
+  |`-.._/_\\_.-';    |   Type (help) for usage info.
+  |         g (_ \   |
+  |        n    | |  |   Docs: http://docs.lfe.io/
+  (       a    / /   |   Source: http://github.com/rvirding/lfe
+   \     l    (_/    |
+    \   r     /      |   LFE v0.11.0-dev (abort with G^)
+     `-E___.-'
+
+&gt;
+</code></pre>
+
+<h2 id="first-run">First Run</h2>
+
+<blockquote>
+<p>Create a schema, asking Moneta to start the Mnesia database for you automatically:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:create-schema</span> <span class="o">#(</span><span class="nv">start</span> <span class="nv">true</span><span class="p">))</span>
+<span class="nv">ok</span>
+</code></pre>
+
+<blockquote>
+<p>Now create a defaul table (with no provided table definition):</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:create-table</span> <span class="ss">'funky</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">atomic</span> <span class="nv">ok</span><span class="p">)</span>
+<span class="nb">&gt;</span>
+</code></pre>
+
+<p>From the LFE REPL you can create a new database on disk, start Mnesia
+up, and then create a table. After creating the table, you can examine the table&rsquo;s metadata.</p>
+
+<blockquote>
+<p>We can take a look at our creation with this command:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:info</span><span class="p">)</span>
+</code></pre>
+
+<blockquote>
+<p>Which should give you something like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>---&gt; Processes holding locks &lt;---
+---&gt; Processes waiting for locks &lt;---
+---&gt; Participant transactions &lt;---
+---&gt; Coordinator transactions &lt;---
+---&gt; Uncertain transactions &lt;---
+---&gt; Active tables &lt;---
+funky          : with 0        records occupying 317      words of mem
+schema         : with 2        records occupying 541      words of mem
+===&gt; System info in version "4.8", debug level = none &lt;===
+opt_disc. Directory "/tmp/funky" is used.
+use fallback at restart = false
+running db nodes   = [nonode@nohost]
+stopped db nodes   = []
+master node tables = []
+remote             = []
+ram_copies         = [funky]
+disc_copies        = [schema]
+disc_only_copies   = []
+[{nonode@nohost,disc_copies}] = [schema]
+[{nonode@nohost,ram_copies}] = [funky]
+3 transactions committed, 0 aborted, 0 restarted, 2 logged to disc
+0 held locks, 0 in queue; 0 local transactions, 0 remote
+0 transactions waits for other nodes: []
+ok
+</code></pre>
+
+<p>You can quit the REPL now, as we&rsquo;ll restart it in the next section.</p>
+
+          <h1 id="dbs-and-tables">DBs and Tables</h1>
+
+<h2 id="starting-again">Starting Again</h2>
+
+<blockquote>
+<p>Restart the LFE REPL using a new data directory:</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="gp">$ </span>lfe -mnesia dir <span class="s1">'"./Company.DB"'</span>
+</code></pre>
+
+<blockquote>
+<p>Create a default database schema:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>&gt; (mnt:create-schema #(start true))
+ok
+</code></pre>
+
+<p>We&rsquo;ve had a quick taste of Mnesia, and what some of the calls look like in LFE.
+Next we&rsquo;re going to tackle a bit more heady stuff: tables and relationships.</p>
+
+<p>After you have quit from your previous LFE REPL, restart using the <code class="prettyprint">Company.DB</code> database name and then create a default schema, passing the auto-start option to Mnesia.</p>
+
+<h2 id="records-as-tables">Records as Tables</h2>
+
+<blockquote>
+<p>The following records are defined in <code class="prettyprint">examples/tables.lfe</code>:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="p">(</span><span class="nv">defrecord</span> <span class="nv">employee</span>
+  <span class="nv">id</span>
+  <span class="nv">name</span>
+  <span class="nv">salary</span>
+  <span class="nv">gender</span>
+  <span class="nv">phone</span>
+  <span class="nv">room-number</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrecord</span> <span class="nv">department</span>
+  <span class="nv">id</span>
+  <span class="nv">name</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrecord</span> <span class="nv">project</span>
+  <span class="nv">name</span>
+  <span class="nc">number</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrecord</span> <span class="nv">manager</span>
+  <span class="nv">employee-id</span>
+  <span class="nv">department-id</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrecord</span> <span class="nv">in-department</span>
+  <span class="nv">employee-id</span>
+  <span class="nv">department-id</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrecord</span> <span class="nv">in-project</span>
+  <span class="nv">employee-id</span>
+  <span class="nv">project-name</span><span class="p">)</span>
+</code></pre>
+
+<blockquote>
+<p>Pull in these table definitions:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">include-file</span> <span class="s">"examples/tables.lfe"</span><span class="p">)</span>
+<span class="nv">loaded-example-tables</span>
+</code></pre>
+
+<blockquote>
+<p>Define your tables:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="nv">set-tables</span> <span class="o">'</span><span class="p">(</span><span class="nv">employee</span> <span class="nv">department</span> <span class="nv">project</span> <span class="nv">in-department</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">employee</span> <span class="nv">department</span> <span class="nv">project</span> <span class="nv">in-department</span><span class="p">)</span>
+<span class="nb">&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="nv">bag-tables</span> <span class="o">'</span><span class="p">(</span><span class="nv">manager</span> <span class="nv">in-project</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">manager</span> <span class="nv">in-project</span><span class="p">)</span>
+</code></pre>
+
+<p>The <code class="prettyprint">tables.lfe</code> example include defines LFE records that act as our table definitions (and thus all the convenient record macros that come with those). These are only definitions, though &ndash; representing a table schema &ndash; not the actual tables themselves. We need to create those.
+as well as a macro that lets us create Mnesia tables with almost no boilerplate.</p>
+
+<p>These records (tables) are taken from the example given in the
+<a href="http://www.erlang.org/doc/apps/mnesia/Mnesia_chap2.html#id63101">Erlang Mnesia tutorial</a> which also gives this entity diagram for their proposed
+ &ldquo;Company&rdquo; database:</p>
+
+<p><img src="http://www.erlang.org/doc/apps/mnesia/company.gif" /></p>
+
+<h2 id="creating-our-tables">Creating Our Tables</h2>
+
+<blockquote>
+<p>Create the tables with the appropriate table specs:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:create-tables</span> <span class="nv">set-tables</span> <span class="o">'</span><span class="p">(</span><span class="o">#(</span><span class="k">type</span> <span class="nb">set</span><span class="p">)))</span>
+<span class="p">(</span><span class="o">#(</span><span class="nv">atomic</span> <span class="nv">ok</span><span class="p">)</span> <span class="o">#(</span><span class="nv">atomic</span> <span class="nv">ok</span><span class="p">)</span> <span class="o">#(</span><span class="nv">atomic</span> <span class="nv">ok</span><span class="p">)</span> <span class="o">#(</span><span class="nv">atomic</span> <span class="nv">ok</span><span class="p">))</span>
+<span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:create-tables</span> <span class="nv">bag-tables</span> <span class="o">'</span><span class="p">(</span><span class="o">#(</span><span class="k">type</span> <span class="nv">bag</span><span class="p">)))</span>
+<span class="p">(</span><span class="o">#(</span><span class="nv">atomic</span> <span class="nv">ok</span><span class="p">)</span> <span class="o">#(</span><span class="nv">atomic</span> <span class="nv">ok</span><span class="p">))</span>
+</code></pre>
+
+<blockquote>
+<p>This just created all our Mnesia tables for us. If we run it again, we&rsquo;ll see
+errors indicating that the tables have already been created:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:create-tables</span> <span class="nv">set-tables</span> <span class="o">'</span><span class="p">(</span><span class="o">#(</span><span class="k">type</span> <span class="nb">set</span><span class="p">)))</span>
+<span class="p">(</span><span class="o">#(</span><span class="nv">aborted</span> <span class="o">#(</span><span class="nv">already_exists</span> <span class="nv">employee</span><span class="p">))</span>
+ <span class="o">#(</span><span class="nv">aborted</span> <span class="o">#(</span><span class="nv">already_exists</span> <span class="nv">department</span><span class="p">))</span>
+ <span class="o">#(</span><span class="nv">aborted</span> <span class="o">#(</span><span class="nv">already_exists</span> <span class="nv">project</span><span class="p">))</span>
+ <span class="o">#(</span><span class="nv">aborted</span> <span class="o">#(</span><span class="nv">already_exists</span> <span class="nv">in-department</span><span class="p">)))</span>
+<span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:create-tables</span> <span class="nv">bag-tables</span> <span class="o">'</span><span class="p">(</span><span class="o">#(</span><span class="k">type</span> <span class="nv">bag</span><span class="p">)))</span>
+<span class="p">(</span><span class="o">#(</span><span class="nv">aborted</span> <span class="o">#(</span><span class="nv">already_exists</span> <span class="nv">manager</span><span class="p">))</span>
+ <span class="o">#(</span><span class="nv">aborted</span> <span class="o">#(</span><span class="nv">already_exists</span> <span class="nv">in-project</span><span class="p">)))</span>
+</code></pre>
+
+<p>When using Mnesia directly, there is a great deal of boilerplate code that developers need to write in order to create tables. Fortunately, Moneta provides several macros and functions that does this for you, making table-creation as intuitive as possible:  all you need to do is provide table names and table specs.</p>
+
+<h2 id="table-metadata">Table Metadata</h2>
+
+<blockquote>
+<p>Next, let&rsquo;s re-run the <code class="prettyprint">info</code> function we saw in the previous section:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:info</span><span class="p">)</span>
+</code></pre>
+<pre class="highlight plaintext"><code>...
+---&gt; Active tables &lt;---
+in-project     : with 0        records occupying 305      words of mem
+in-department  : with 0        records occupying 305      words of mem
+manager        : with 0        records occupying 305      words of mem
+project        : with 0        records occupying 305      words of mem
+department     : with 0        records occupying 305      words of mem
+employee       : with 0        records occupying 305      words of mem
+...
+</code></pre>
+
+<blockquote>
+<p>Here&rsquo;s how you find what backend type is being used for any given table:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:table-info</span> <span class="ss">'employee</span> <span class="ss">'type</span><span class="p">)</span>
+<span class="nb">set</span>
+<span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:table-info</span> <span class="ss">'in-project</span> <span class="ss">'type</span><span class="p">)</span>
+<span class="nv">bag</span>
+<span class="nb">&gt;</span>
+</code></pre>
+
+<blockquote>
+<p>You can also get table metadata for several tables at once:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:tables-info</span> <span class="p">(</span><span class="nv">++</span> <span class="nv">set-tables</span> <span class="nv">bag-tables</span><span class="p">)</span> <span class="ss">'type</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">set</span> <span class="nb">set</span> <span class="nb">set</span> <span class="nb">set</span> <span class="nv">bag</span> <span class="nv">bag</span><span class="p">)</span>
+</code></pre>
+
+<blockquote>
+<p>If you&rsquo;re interested in seeing <em>all</em> the details of any given table, you can
+do so with the <code class="prettyprint">&#39;all</code> parameter:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">mnt:table-info</span> <span class="ss">'employee</span> <span class="ss">'all</span><span class="p">)</span>
+<span class="p">(</span><span class="o">#(</span><span class="nv">access_mode</span> <span class="nv">read_write</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">active_replicas</span> <span class="p">(</span><span class="nv">nonode@nohost</span><span class="p">))</span>
+<span class="o">#(</span><span class="nv">all_nodes</span> <span class="p">(</span><span class="nv">nonode@nohost</span><span class="p">))</span>
+<span class="o">#(</span><span class="nv">arity</span> <span class="mi">7</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">attributes</span> <span class="p">(</span><span class="nv">id</span> <span class="nv">name</span> <span class="nv">salary</span> <span class="nv">gender</span> <span class="nv">phone</span> <span class="nv">room-number</span><span class="p">))</span>
+<span class="o">#(</span><span class="nv">checkpoints</span> <span class="p">())</span>
+<span class="o">#(</span><span class="nv">commit_work</span> <span class="p">())</span>
+<span class="o">#(</span><span class="nv">cookie</span> <span class="o">#(#(</span><span class="mi">1396</span> <span class="mi">680215</span> <span class="mi">616649</span><span class="p">)</span> <span class="nv">nonode@nohost</span><span class="p">))</span>
+<span class="o">#(</span><span class="nv">cstruct</span>
+ <span class="o">#(</span><span class="nv">cstruct</span>
+   <span class="nv">employee</span>
+   <span class="nb">set</span>
+   <span class="p">(</span><span class="nv">nonode@nohost</span><span class="p">)</span>
+   <span class="p">()</span>
+   <span class="p">()</span>
+   <span class="mi">0</span>
+   <span class="nv">read_write</span>
+   <span class="nv">false</span>
+   <span class="p">()</span>
+   <span class="p">()</span>
+   <span class="nv">false</span>
+   <span class="nv">employee</span>
+   <span class="p">(</span><span class="nv">id</span> <span class="nv">name</span> <span class="nv">salary</span> <span class="nv">gender</span> <span class="o">...</span><span class="p">)</span>
+   <span class="p">()</span>
+   <span class="p">()</span>
+   <span class="p">()</span>
+   <span class="o">#(...</span><span class="p">)</span><span class="o">...</span><span class="p">))</span>
+<span class="o">#(</span><span class="nv">disc_copies</span> <span class="p">())</span>
+<span class="o">#(</span><span class="nv">disc_only_copies</span> <span class="p">())</span>
+<span class="o">#(</span><span class="nv">frag_properties</span> <span class="p">())</span>
+<span class="o">#(</span><span class="nv">index</span> <span class="p">())</span>
+<span class="o">#(</span><span class="nv">load_by_force</span> <span class="nv">false</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">load_node</span> <span class="nv">nonode@nohost</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">load_order</span> <span class="mi">0</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">load_reason</span> <span class="o">#(</span><span class="nv">dumper</span> <span class="nv">create_table</span><span class="p">))</span>
+<span class="o">#(</span><span class="nv">local_content</span> <span class="nv">false</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">majority</span> <span class="nv">false</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">master_nodes</span> <span class="p">())</span>
+<span class="o">#(</span><span class="nv">memory</span> <span class="mi">317</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">ram_copies</span> <span class="p">(</span><span class="nv">nonode@nohost</span><span class="p">))</span>
+<span class="o">#(</span><span class="nv">record_name</span> <span class="nv">employee</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">record_validation</span> <span class="o">#(</span><span class="nv">employee</span> <span class="mi">7</span> <span class="nb">set</span><span class="p">))</span>
+<span class="o">#(</span><span class="k">type</span> <span class="nb">set</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">size</span> <span class="mi">0</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">snmp</span> <span class="p">())</span>
+<span class="o">#(</span><span class="nv">storage_properties</span> <span class="o">...</span><span class="p">)</span>
+<span class="o">#(...</span><span class="p">)</span><span class="o">...</span><span class="p">)</span>
+<span class="nb">&gt;</span>
+</code></pre>
+
+<p>The output of the <code class="prettyprint">info</code> function will be very similar to what we saw in the
+previous section. However, do note that our new tables are reported in the
+&ldquo;Active tables&rdquo; section:</p>
+
+<p>If you would like to check up on the tables created above, you can use the
+<code class="prettyprint">table-info</code> function to pull out certain data.</p>
+
+<p>Next up, we&rsquo;ll start inserting some data.</p>
+
+          <h1 id="content">Content</h1>
+
+          <h1 id="querying">Querying</h1>
+
+          <h1 id="previous-versions">Previous Versions</h1>
+
+<p>Documentation is available for all previous releases:</p>
+
+<ul>
+<li><a href="../current/">Development version</a></li>
+<li><a href="../current/">0.1.0</a></li>
+</ul>
+
+          <h1 id="license">License</h1>
+
+<p>Copyright &copy; 2016 Duncan McGreggor</p>
+
+<p>Distributed under the Apache License, Version 2.0.</p>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name=""></a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

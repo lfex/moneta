@@ -1,15 +1,13 @@
 %% -*- erlang -*-
-{application, moneta,
- [
+{application, moneta, [
   %% A quick description of the application.
   {description, "A Lispy wrapper for Erlang Mnesia and QLC"},
 
   %% The version of the application
-  {vsn, "0.1.0"},
+  {vsn, "0.2.0-dev"},
 
   %% All modules used by the application.
-  {modules,
-   [
+  {modules, [
     moneta
    ]},
 
@@ -19,8 +17,7 @@
   %% Applications that are to be started prior to this one. This can be ignored
   %% leave it alone unless you understand it well and let the .rel files in
   %% your release handle this.
-  {applications,
-   [
+  {applications, [
     kernel,
     stdlib
    ]},
@@ -30,8 +27,22 @@
   %% is easier to include it in the .rel file followed by the atom 'none'
   {included_applications, []},
 
-  %% configuration parameters similar to those in the config file specified
+  %% Configuration parameters similar to those in the config file specified
   %% on the command line. can be fetched with gas:get_env
-  {env, []}
- ]
-}.
+  {env, []},
+
+  %% Package metadata
+  {pkg_name, moneta},
+  {licenses, ["Apache 2.0"]},
+  {links, [
+    {"GitHub", "https://github.com/lfex/moneta"},
+    {"Gitlab", "https://gitlab.com/lfex/moneta"},
+    {"Hex", "https://hex.pm/packages/moneta"}
+  ]},
+  {exclude_files, [
+    "priv/images/*",
+    "priv/html/*",
+    "priv/make/*",
+    "priv/mdbook/*"
+  ]}
+]}.
