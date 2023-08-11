@@ -1,9 +1,5 @@
 (defmodule mnta
-  (export all)
-  ;;(export-macro create-table
-                ;;              create-tables
-    ;;            )
-  )
+  (export all))
 
 (include-lib "lfe/include/clj.lfe")
 (include-lib "moneta/include/mnta.lfe")
@@ -82,7 +78,7 @@
   access to the environment where the table macros were compiled."
   (create-table table-name '() env))
 
-(defun create-table (table-name table-defs env)
+(defun create-table (table-name table-opts env)
   "A function version of the create-table macro.
 
   Note that since this function calls a table record macro, it requires
@@ -92,24 +88,24 @@
        (funcall (lambda (x) (eval x env)))
        (tuple 'attributes)
        (list)
-       (++ table-defs)
+       (++ table-opts)
        (mnesia:create_table table-name)))
 
 (defun create-tables (table-names env)
   (create-tables table-names '() env '()))
 
-(defun create-tables (table-names table-defs env)
-  (create-tables table-names '() env '()))
+(defun create-tables (table-names table-opts env)
+  (create-tables table-names table-opts env '()))
 
 (defun create-tables
   "A function that creates tables of the same type in one go."
   (('() _ _ results)
    results)
-  ((`(,table-name . ,tail-names) table-defs env acc)
-   (let ((results (case (create-table table-name table-defs env)
+  ((`(,table-name . ,tail-names) table-opts env acc)
+   (let ((results (case (create-table table-name table-opts env)
                     ('ok (++ acc `#(ok ,table-name)))
                     (err (++ acc (list err))))))
-     (create-tables tail-names table-defs env results))))
+     (create-tables tail-names table-opts env results))))
 
 (defun tables-info (tables key)
   "Get table metadata for more than one table at once."
