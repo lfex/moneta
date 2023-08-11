@@ -99,7 +99,7 @@ Next we'll explore the relational aspect of our data. First, let's create some e
                    projects '(mnesia otp))))
 ```
 
-Since we have relationships with other tables, we'll need to augment the employee insert operation. We can do that by providing a custom function that will be called inside the transaction:
+Since we have relationships with other tables, we'll need to create a custom insert for employee records:
 
 ``` cl
 (defun add-projects

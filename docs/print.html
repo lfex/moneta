@@ -573,7 +573,7 @@ lfe&gt; (mnta-qry:select-all 'project)
     (make-employee id 7 name &quot;Mattsson Hakan&quot; department-id 'B/SFR
                    projects '(mnesia otp))))
 </code></pre>
-<p>Since we have relationships with other tables, we'll need to augment the employee insert operation. We can do that by providing a custom function that will be called inside the transaction:</p>
+<p>Since we have relationships with other tables, we'll need to create a custom insert for employee records:</p>
 <pre><code class="language-cl">(defun add-projects
   ((_ '())
    'ok)
