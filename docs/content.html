@@ -164,7 +164,7 @@ ok
 <pre><code class="language-cl">lfe&gt; (set `#(atomic ,results) (mnta-qry:select-all 'department))
 </code></pre>
 <p>These results are department records, so we can iterate over them and use their record macros. For example:</p>
-<pre><code class="language-cl">(lists:map (lambda (r) (department-name r)) results) 
+<pre><code class="language-cl">lfe&gt; (lists:map (lambda (r) (department-name r)) results) 
 </code></pre>
 <p>which gives:</p>
 <pre><code class="language-cl">(&quot;Open Telecom Platform&quot;
@@ -215,33 +215,44 @@ lfe&gt; (mnta-qry:select-all 'project)
                    projects '(mnesia otp))))
 </code></pre>
 <p>Since we have relationships with other tables, we'll need to augment the employee insert operation. We can do that by providing a custom function that will be called inside the transaction:</p>
-<pre><code class="language-cl">(defun add-relations
-  (((match-employee id id department-id dept-id projects projs))
-   (mnesia:write (make-in-department employee-id id department-id dept-id))
-   (lists:map
-     (lambda (p)
-       (mnesia:write (make-in-project employee-id id project-name p)))
-     projs)))
+<pre><code class="language-cl">(defun add-projects
+  ((_ '())
+   'ok)
+  ((emp-id `(,proj . ,tail))
+   (mnesia:write (make-in-project employee-id emp-id project-name proj))
+   (add-projects emp-id tail)))
 
-(defun insert-employee
-  (((= (match-employee id id department-id dept-id projects projs) record))
+(defun insert-employees
+  (('())
+   'ok)
+  ((`(,(= (match-employee id id department-id dept-id projects projs) record) . ,tail))
    (mnesia:transaction
     (lambda ()
       (mnesia:write record)
       (mnesia:write (make-in-department employee-id id department-id dept-id))
-      (lists:map
-       (lambda (p)
-         (mnesia:write (make-in-project employee-id id project-name p)))
-       projs)))))
+      (add-projects id projs)))
+   (insert-employees tail)))
 </code></pre>
 <p>We can then insert the employee data and create all the relations with this:</p>
-<pre><code class="language-cl">lfe&gt; (mnta-qry:insert empls #'add-relations/1)
+<pre><code class="language-cl">lfe&gt; (insert-employees empls)
 </code></pre>
 <p>And then use what we did before to check the inserts:</p>
 <pre><code class="language-cl">lfe&gt; (mnta-qry:select-all 'employee)
 lfe&gt; (mnta-qry:select-all 'in-department)
 lfe&gt; (mnta-qry:select-all 'in-project)
 </code></pre>
+<p>Finally, we'll round out the relationships with employee managers, starting with the list of records:</p>
+<pre><code class="language-cl">(set mgrs
+  (list
+    (make-manager employee-id 1 department-id 'B/SF)
+    (make-manager employee-id 1 department-id 'B/SFP)
+    (make-manager employee-id 3 department-id 'B/SFR)))
+</code></pre>
+<p>Now for the insert:</p>
+<pre><code class="language-cl">lfe&gt; (mnta-qry:insert mgrs)
+ok
+</code></pre>
+<p>With the data in place, we're ready to dive into querying it ...</p>
 
                     </main>
 

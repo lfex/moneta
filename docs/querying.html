@@ -145,6 +145,54 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="querying"><a class="header" href="#querying">Querying</a></h1>
+<p>We've already used some of the querying techniques for inserting and selecting all records. Here we'll explore some specifics of other types of queries we can make against the database.</p>
+<h2 id="select-and-match-specs"><a class="header" href="#select-and-match-specs">Select and Match Specs</a></h2>
+<p>Mnesia supports a form of querying data using a &quot;match specification&quot; with various level of detail provided at the following:</p>
+<ul>
+<li><a href="https://www.erlang.org/doc/man/mnesia#select-2">#'mnesia:select/2</a></li>
+<li><a href="https://www.erlang.org/doc/man/ets#select-2">#'ets:select/2</a></li>
+<li><a href="https://www.erlang.org/doc/apps/erts/match_spec">Match Specifications in Erlang</a></li>
+</ul>
+<p>On the LFE side, a brief description of using match specifications is provided here:</p>
+<ul>
+<li><a href="https://github.com/lfe/lfe/blob/develop/doc/src/lfe_guide.7.md#ets-and-mnesia">ETS and Mnesia</a></li>
+</ul>
+<p>Selects in mnesia have to be wrapped in a transaction, so moneta provides a convenience function for this. We can use it and the LFE <code>ets-ms</code> macro to query our employee table, finding all who belong to the <code>B/SFR</code> department:</p>
+<pre><code class="language-cl">lfe&gt; (set `#(atomic ,results)
+       (mnta-qry:select 'employee 
+         (ets-ms
+          (((match-employee department-id 'B/SFR name '$1)) '() '($1)))))
+</code></pre>
+<p>Which gives us the following:</p>
+<pre><code class="language-cl">lfe&gt; results
+((&quot;Dacker Bjarne&quot;)
+ (&quot;Fedoriw Anna&quot;)
+ (&quot;Nilsson Hans&quot;)
+ (&quot;Tornkvist Torbjorn&quot;)
+ (&quot;Mattsson Hakan&quot;))
+</code></pre>
+<p>We can also use guards in the match specs, providing a similar capability as the SQL <code>WHERE</code> clause. Here we get the three lowest-numbered employee IDs:</p>
+<pre><code class="language-cl">lfe&gt; (set `#(atomic ,results)
+       (mnta-qry:select 'employee 
+         (ets-ms
+          (((match-employee id id name '$2)) (when (=&lt; id 3)) '($2)))))
+</code></pre>
+<p>giving us the following:</p>
+<pre><code class="language-cl">lfe&gt; results
+((&quot;Dacker Bjarne&quot;)
+ (&quot;Carlsson Tuula&quot;)
+ (&quot;Johnson Torbjorn&quot;))
+</code></pre>
+<h2 id="qlc"><a class="header" href="#qlc">QLC</a></h2>
+<p>The other way to query Mnesia is to use &quot;query list comprehensions&quot; which you can read about in detail at the following:</p>
+<ul>
+<li><a href="https://www.erlang.org/doc/apps/mnesia/mnesia_chap2#example">The &quot;Using QLC&quot; section</a></li>
+<li><a href="https://www.erlang.org/doc/man/qlc">The Erlang qlc module</a></li>
+<li><a href="https://github.com/lfe/lfe/blob/develop/doc/src/lfe_guide.7.md#query-list-comprehensions">The LFE qlc macro</a></li>
+</ul>
+<p>Let's rewrite our queries above using QLCs:</p>
+<pre><code class="language-cl">
+</code></pre>
 
                     </main>
 
