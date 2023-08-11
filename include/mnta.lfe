@@ -53,7 +53,7 @@
       (s-delete-object 1)
       (s-write 1)
       (schema 0) (schema 1)
-      (select 2) (select 4) (select 1)
+      ;;(select 2) (select 4) (select 1) -- we have a select wrapper in mnta-qry
       (set-debug-level 1)
       (set-master-nodes 1) (set-master-nodes 2)
       (snmp-close-table 1)
@@ -85,8 +85,7 @@
 
 (defmacro generate-api ()
   `(progn
-     ,@(kla:make-funcs (get-api-funcs) 'mnesia)
-     '--generated-api--))
+     ,@(kla:make-funcs (get-api-funcs) 'mnesia)))
 
 (generate-api)
 
