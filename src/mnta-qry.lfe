@@ -1,6 +1,8 @@
 (defmodule mnta-qry
   (export
    (insert 1) (insert 2)
+   (qlc 1)
+   (select 2)
    (select-all 1)))
 
 (include-lib "moneta/include/mnta-qry.lfe")
@@ -16,6 +18,17 @@
   ((`(,record . ,tail) func)
    (insert-one record func)
    (insert tail)))
+
+(defun qlc (list-comp)
+  (mnesia:transaction
+   (lambda ()
+     (qlc:e
+      (qlc:q list-comp)))))
+
+(defun select (table match-spec)
+  (mnesia:transaction
+   (lambda ()
+     (mnesia:select table match-spec))))
 
 (defun select-all (table-name)
   (mnesia:transaction
