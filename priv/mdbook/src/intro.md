@@ -90,35 +90,10 @@ In order to work through this tutorial, you will need the following:
 
 The real differences are the modules and the additional utility functions. Module changes from the ``mnesia`` and ``qlc`` Erlang modules are as follows:
 
-* ``mns`` - holds alll the ``mnesia`` functions besides the dirty ones
-* ``mns-drty`` - split dirty functions into their own module ("dirty" operations are short-cuts that bypass much of the processing and increase the speed of the transaction)
-* ``mns-qry`` - ``qlc`` alias; longer to type than ``qlc``, but provides some nice visual context when scanning code
+* ``mnta`` - holds alll the ``mnesia`` functions besides the dirty ones
+* ``mnta-drty`` - split dirty functions into their own module ("dirty" operations are short-cuts that bypass much of the processing and increase the speed of the transaction)
+* ``mnta-qry`` - ``qlc`` alias; longer to type than ``qlc``, but provides some nice visual context when scanning code
 
 The utility functions that have been added are as follows:
 
 TBD
-
-
-## Conventions
-
-We use styled call-outs to provide immediate visual cues about the nature of
-the information being shared.
-
-These are as follows:
-
-<aside class="info">
-This style indicates useful information, background, or other insights.
-</aside>
-
-<aside class="success">
-This style indicates a best practice, good usage, and other tips for success.
-</aside>
-
-<aside class="caution">
-This style indicates one should use caution or that behaviour may not be as
-expected
-</aside>
-
-<aside class="danger">
-This style indicates information that could cause errors if ignored.
-</aside>

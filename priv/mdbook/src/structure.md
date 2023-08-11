@@ -5,13 +5,13 @@
 > Restart the LFE REPL using a new data directory:
 
 ```bash
-$ lfe -mnesia dir '"./Company.DB"'
+$ rebar3 lfe repl
 ```
 
 > Create a default database schema:
 
 ```lisp
-> (mnt:create-schema #(start true))
+lfe> (mnta:create-schema #(start true))
 ok
 ```
 
@@ -58,16 +58,16 @@ After you have quit from your previous LFE REPL, restart using the ``Company.DB`
 > Pull in these table definitions:
 
 ```cl
-> (include-file "examples/tables.lfe")
+lfe> (include-file "examples/tables.lfe")
 loaded-example-tables
 ```
 
 > Define your tables:
 
 ```cl
-> (set set-tables '(employee department project in-department))
+lfe> (set set-tables '(employee department project in-department))
 (employee department project in-department)
-> (set bag-tables '(manager in-project))
+lfe> (set bag-tables '(manager in-project))
 (manager in-project)
 ```
 
@@ -86,9 +86,9 @@ These records (tables) are taken from the example given in the
 > Create the tables with the appropriate table specs:
 
 ```cl
-> (mnt:create-tables set-tables '(#(type set)))
+lfe> (mnta:create-tables set-tables '(#(type set)) $ENV)
 (#(atomic ok) #(atomic ok) #(atomic ok) #(atomic ok))
-> (mnt:create-tables bag-tables '(#(type bag)))
+lfe> (mnta:create-tables bag-tables '(#(type bag)) $ENV)
 (#(atomic ok) #(atomic ok))
 ```
 
@@ -96,12 +96,12 @@ These records (tables) are taken from the example given in the
 errors indicating that the tables have already been created:
 
 ```cl
-> (mnt:create-tables set-tables '(#(type set)))
+lfe> (mnta:create-tables set-tables '(#(type set)))
 (#(aborted #(already_exists employee))
  #(aborted #(already_exists department))
  #(aborted #(already_exists project))
  #(aborted #(already_exists in-department)))
-> (mnt:create-tables bag-tables '(#(type bag)))
+lfe> (mnta:create-tables bag-tables '(#(type bag)))
 (#(aborted #(already_exists manager))
  #(aborted #(already_exists in-project)))
 ```
@@ -114,7 +114,7 @@ When using Mnesia directly, there is a great deal of boilerplate code that devel
 > Next, let's re-run the ``info`` function we saw in the previous section:
 
 ```cl
-> (mnt:info)
+lfe> (mnta:info)
 ```
 ```
 ...
@@ -131,17 +131,16 @@ employee       : with 0        records occupying 305      words of mem
 > Here's how you find what backend type is being used for any given table:
 
 ```cl
-> (mnt:table-info 'employee 'type)
+lfe> (mnta:table-info 'employee 'type)
 set
-> (mnt:table-info 'in-project 'type)
+lfe> (mnta:table-info 'in-project 'type)
 bag
->
 ```
 
 > You can also get table metadata for several tables at once:
 
 ```cl
-> (mnt:tables-info (++ set-tables bag-tables) 'type)
+lfe> (mnta:tables-info (++ set-tables bag-tables) 'type)
 (set set set set bag bag)
 ```
 
@@ -149,7 +148,7 @@ bag
 do so with the ``'all`` parameter:
 
 ```cl
-> (mnt:table-info 'employee 'all)
+lfe> (mnta:table-info 'employee 'all)
 (#(access_mode read_write)
 #(active_replicas (nonode@nohost))
 #(all_nodes (nonode@nohost))

@@ -149,12 +149,12 @@
 <blockquote>
 <p>Restart the LFE REPL using a new data directory:</p>
 </blockquote>
-<pre><code class="language-bash">$ lfe -mnesia dir '&quot;./Company.DB&quot;'
+<pre><code class="language-bash">$ rebar3 lfe repl
 </code></pre>
 <blockquote>
 <p>Create a default database schema:</p>
 </blockquote>
-<pre><code class="language-lisp">&gt; (mnt:create-schema #(start true))
+<pre><code class="language-lisp">lfe&gt; (mnta:create-schema #(start true))
 ok
 </code></pre>
 <p>We've had a quick taste of Mnesia, and what some of the calls look like in LFE.
@@ -195,15 +195,15 @@ Next we're going to tackle a bit more heady stuff: tables and relationships.</p>
 <blockquote>
 <p>Pull in these table definitions:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (include-file &quot;examples/tables.lfe&quot;)
+<pre><code class="language-cl">lfe&gt; (include-file &quot;examples/tables.lfe&quot;)
 loaded-example-tables
 </code></pre>
 <blockquote>
 <p>Define your tables:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (set set-tables '(employee department project in-department))
+<pre><code class="language-cl">lfe&gt; (set set-tables '(employee department project in-department))
 (employee department project in-department)
-&gt; (set bag-tables '(manager in-project))
+lfe&gt; (set bag-tables '(manager in-project))
 (manager in-project)
 </code></pre>
 <p>The <code>tables.lfe</code> example include defines LFE records that act as our table definitions (and thus all the convenient record macros that come with those). These are only definitions, though -- representing a table schema -- not the actual tables themselves. We need to create those.
@@ -216,21 +216,21 @@ as well as a macro that lets us create Mnesia tables with almost no boilerplate.
 <blockquote>
 <p>Create the tables with the appropriate table specs:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:create-tables set-tables '(#(type set)))
+<pre><code class="language-cl">lfe&gt; (mnta:create-tables set-tables '(#(type set)) $ENV)
 (#(atomic ok) #(atomic ok) #(atomic ok) #(atomic ok))
-&gt; (mnt:create-tables bag-tables '(#(type bag)))
+lfe&gt; (mnta:create-tables bag-tables '(#(type bag)) $ENV)
 (#(atomic ok) #(atomic ok))
 </code></pre>
 <blockquote>
 <p>This just created all our Mnesia tables for us. If we run it again, we'll see
 errors indicating that the tables have already been created:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:create-tables set-tables '(#(type set)))
+<pre><code class="language-cl">lfe&gt; (mnta:create-tables set-tables '(#(type set)))
 (#(aborted #(already_exists employee))
  #(aborted #(already_exists department))
  #(aborted #(already_exists project))
  #(aborted #(already_exists in-department)))
-&gt; (mnt:create-tables bag-tables '(#(type bag)))
+lfe&gt; (mnta:create-tables bag-tables '(#(type bag)))
 (#(aborted #(already_exists manager))
  #(aborted #(already_exists in-project)))
 </code></pre>
@@ -239,7 +239,7 @@ errors indicating that the tables have already been created:</p>
 <blockquote>
 <p>Next, let's re-run the <code>info</code> function we saw in the previous section:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:info)
+<pre><code class="language-cl">lfe&gt; (mnta:info)
 </code></pre>
 <pre><code>...
 ---&gt; Active tables &lt;---
@@ -254,23 +254,22 @@ employee       : with 0        records occupying 305      words of mem
 <blockquote>
 <p>Here's how you find what backend type is being used for any given table:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:table-info 'employee 'type)
+<pre><code class="language-cl">lfe&gt; (mnta:table-info 'employee 'type)
 set
-&gt; (mnt:table-info 'in-project 'type)
+lfe&gt; (mnta:table-info 'in-project 'type)
 bag
-&gt;
 </code></pre>
 <blockquote>
 <p>You can also get table metadata for several tables at once:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:tables-info (++ set-tables bag-tables) 'type)
+<pre><code class="language-cl">lfe&gt; (mnta:tables-info (++ set-tables bag-tables) 'type)
 (set set set set bag bag)
 </code></pre>
 <blockquote>
 <p>If you're interested in seeing <em>all</em> the details of any given table, you can
 do so with the <code>'all</code> parameter:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:table-info 'employee 'all)
+<pre><code class="language-cl">lfe&gt; (mnta:table-info 'employee 'all)
 (#(access_mode read_write)
 #(active_replicas (nonode@nohost))
 #(all_nodes (nonode@nohost))

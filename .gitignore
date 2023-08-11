@@ -38,3 +38,4 @@ tramp
 # Project
 /docs/user-guide/build/
 /workbench
+/Mnesia.nonode@nohost/

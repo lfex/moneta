@@ -155,52 +155,62 @@ $ cd moneta
 <blockquote>
 <p>Next, get all the dependencies downloaded and built:</p>
 </blockquote>
-<pre><code class="language-bash">$ make
+<pre><code class="language-bash">$ rebar3 compile
 </code></pre>
 <p>The moneta project offers some convenience wrappers for the Erlang/OTP <code>mnesia</code> and <code>qlc</code> modules. To walk through the tutorial, you'll need to download the project source code.</p>
 <p>Once you have the code built, you're ready to go :-) Now you can start the LFE REPL, letting it know where to save your data.</p>
 <blockquote>
 <p>Start LFE and let it know where you data will be saved:</p>
 </blockquote>
-<pre><code class="language-bash">$ lfe -mnesia dir '&quot;/tmp/funky&quot;'
+<pre><code class="language-bash">$ rebar3 lfe repl
 </code></pre>
 <blockquote>
 <p>Once in the REPL, you're ready to start dataing:</p>
 </blockquote>
-<pre><code>Erlang/OTP 17 [erts-6.2] [source] [64-bit] [smp:4:4] ...
+<pre><code>Erlang/OTP 26 [erts-14.0.2] [source] [64-bit] [smp:10:10] ...
 
-   ..-~.~_~--..
-  (      \\    )     |   A Lisp-2+ on the Erlang VM
-  |`-.._/_\\_.-';    |   Type (help) for usage info.
-  |         g (_ \   |
+   ..-~.~_~---..
+  (      \\     )    |   A Lisp-2+ on the Erlang VM
+  |`-.._/_\\_.-':    |   Type (help) for usage info.
+  |         g |_ \   |
   |        n    | |  |   Docs: http://docs.lfe.io/
-  (       a    / /   |   Source: http://github.com/rvirding/lfe
-   \     l    (_/    |
-    \   r     /      |   LFE v0.11.0-dev (abort with G^)
+  |       a    / /   |   Source: http://github.com/lfe/lfe
+   \     l    |_/    |
+    \   r     /      |   LFE v2.1.2 (abort with ^G)
      `-E___.-'
 
-&gt;
+lfe&gt;
 </code></pre>
 <h2 id="first-run"><a class="header" href="#first-run">First Run</a></h2>
 <blockquote>
+<p>We're going to be using macros in the REPL, so let's include them:</p>
+</blockquote>
+<pre><code class="language-cl">lfe&gt; (include-lib &quot;moneta/include/macros.lfe&quot;)
+--loaded-moneta-macros--
+</code></pre>
+<blockquote>
 <p>Create a schema, asking Moneta to start the Mnesia database for you automatically:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:create-schema #(start true))
+<pre><code class="language-cl">lfe&gt; (mnta:create-schema #(start true))
 ok
+</code></pre>
+<blockquote>
+<p>Define a record for storing data:</p>
+</blockquote>
+<pre><code class="language-cl">lfe&gt; (defrecord funky a b c)
 </code></pre>
 <blockquote>
 <p>Now create a defaul table (with no provided table definition):</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:create-table 'funky)
+<pre><code class="language-cl">lfe&gt; (mnta:create-table 'funky $ENV)
 #(atomic ok)
-&gt;
 </code></pre>
 <p>From the LFE REPL you can create a new database on disk, start Mnesia
 up, and then create a table. After creating the table, you can examine the table's metadata.</p>
 <blockquote>
 <p>We can take a look at our creation with this command:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:info)
+<pre><code class="language-cl">&gt; (mnta:info)
 </code></pre>
 <blockquote>
 <p>Which should give you something like this:</p>

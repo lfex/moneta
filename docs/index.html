@@ -214,29 +214,12 @@ disc_log by preference.</li>
 <h2 id="using-moneta"><a class="header" href="#using-moneta">Using Moneta</a></h2>
 <p>The real differences are the modules and the additional utility functions. Module changes from the <code>mnesia</code> and <code>qlc</code> Erlang modules are as follows:</p>
 <ul>
-<li><code>mns</code> - holds alll the <code>mnesia</code> functions besides the dirty ones</li>
-<li><code>mns-drty</code> - split dirty functions into their own module (&quot;dirty&quot; operations are short-cuts that bypass much of the processing and increase the speed of the transaction)</li>
-<li><code>mns-qry</code> - <code>qlc</code> alias; longer to type than <code>qlc</code>, but provides some nice visual context when scanning code</li>
+<li><code>mnta</code> - holds alll the <code>mnesia</code> functions besides the dirty ones</li>
+<li><code>mnta-drty</code> - split dirty functions into their own module (&quot;dirty&quot; operations are short-cuts that bypass much of the processing and increase the speed of the transaction)</li>
+<li><code>mnta-qry</code> - <code>qlc</code> alias; longer to type than <code>qlc</code>, but provides some nice visual context when scanning code</li>
 </ul>
 <p>The utility functions that have been added are as follows:</p>
 <p>TBD</p>
-<h2 id="conventions"><a class="header" href="#conventions">Conventions</a></h2>
-<p>We use styled call-outs to provide immediate visual cues about the nature of
-the information being shared.</p>
-<p>These are as follows:</p>
-<aside class="info">
-This style indicates useful information, background, or other insights.
-</aside>
-<aside class="success">
-This style indicates a best practice, good usage, and other tips for success.
-</aside>
-<aside class="caution">
-This style indicates one should use caution or that behaviour may not be as
-expected
-</aside>
-<aside class="danger">
-This style indicates information that could cause errors if ignored.
-</aside>
 
                     </main>
 

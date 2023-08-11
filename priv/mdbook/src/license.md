@@ -1,7 +1,7 @@
 # License
 
 ```
-Copyright &copy; 2014-2023 Duncan McGreggor
+Copyright © 2014-2023 Duncan McGreggor
 
 Distributed under the Apache License, Version 2.0.
 ```

@@ -215,29 +215,12 @@ disc_log by preference.</li>
 <h2 id="using-moneta"><a class="header" href="#using-moneta">Using Moneta</a></h2>
 <p>The real differences are the modules and the additional utility functions. Module changes from the <code>mnesia</code> and <code>qlc</code> Erlang modules are as follows:</p>
 <ul>
-<li><code>mns</code> - holds alll the <code>mnesia</code> functions besides the dirty ones</li>
-<li><code>mns-drty</code> - split dirty functions into their own module (&quot;dirty&quot; operations are short-cuts that bypass much of the processing and increase the speed of the transaction)</li>
-<li><code>mns-qry</code> - <code>qlc</code> alias; longer to type than <code>qlc</code>, but provides some nice visual context when scanning code</li>
+<li><code>mnta</code> - holds alll the <code>mnesia</code> functions besides the dirty ones</li>
+<li><code>mnta-drty</code> - split dirty functions into their own module (&quot;dirty&quot; operations are short-cuts that bypass much of the processing and increase the speed of the transaction)</li>
+<li><code>mnta-qry</code> - <code>qlc</code> alias; longer to type than <code>qlc</code>, but provides some nice visual context when scanning code</li>
 </ul>
 <p>The utility functions that have been added are as follows:</p>
 <p>TBD</p>
-<h2 id="conventions"><a class="header" href="#conventions">Conventions</a></h2>
-<p>We use styled call-outs to provide immediate visual cues about the nature of
-the information being shared.</p>
-<p>These are as follows:</p>
-<aside class="info">
-This style indicates useful information, background, or other insights.
-</aside>
-<aside class="success">
-This style indicates a best practice, good usage, and other tips for success.
-</aside>
-<aside class="caution">
-This style indicates one should use caution or that behaviour may not be as
-expected
-</aside>
-<aside class="danger">
-This style indicates information that could cause errors if ignored.
-</aside>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
 <h2 id="download-moneta"><a class="header" href="#download-moneta">Download Moneta</a></h2>
 <blockquote>
@@ -249,52 +232,62 @@ $ cd moneta
 <blockquote>
 <p>Next, get all the dependencies downloaded and built:</p>
 </blockquote>
-<pre><code class="language-bash">$ make
+<pre><code class="language-bash">$ rebar3 compile
 </code></pre>
 <p>The moneta project offers some convenience wrappers for the Erlang/OTP <code>mnesia</code> and <code>qlc</code> modules. To walk through the tutorial, you'll need to download the project source code.</p>
 <p>Once you have the code built, you're ready to go :-) Now you can start the LFE REPL, letting it know where to save your data.</p>
 <blockquote>
 <p>Start LFE and let it know where you data will be saved:</p>
 </blockquote>
-<pre><code class="language-bash">$ lfe -mnesia dir '&quot;/tmp/funky&quot;'
+<pre><code class="language-bash">$ rebar3 lfe repl
 </code></pre>
 <blockquote>
 <p>Once in the REPL, you're ready to start dataing:</p>
 </blockquote>
-<pre><code>Erlang/OTP 17 [erts-6.2] [source] [64-bit] [smp:4:4] ...
+<pre><code>Erlang/OTP 26 [erts-14.0.2] [source] [64-bit] [smp:10:10] ...
 
-   ..-~.~_~--..
-  (      \\    )     |   A Lisp-2+ on the Erlang VM
-  |`-.._/_\\_.-';    |   Type (help) for usage info.
-  |         g (_ \   |
+   ..-~.~_~---..
+  (      \\     )    |   A Lisp-2+ on the Erlang VM
+  |`-.._/_\\_.-':    |   Type (help) for usage info.
+  |         g |_ \   |
   |        n    | |  |   Docs: http://docs.lfe.io/
-  (       a    / /   |   Source: http://github.com/rvirding/lfe
-   \     l    (_/    |
-    \   r     /      |   LFE v0.11.0-dev (abort with G^)
+  |       a    / /   |   Source: http://github.com/lfe/lfe
+   \     l    |_/    |
+    \   r     /      |   LFE v2.1.2 (abort with ^G)
      `-E___.-'
 
-&gt;
+lfe&gt;
 </code></pre>
 <h2 id="first-run"><a class="header" href="#first-run">First Run</a></h2>
 <blockquote>
+<p>We're going to be using macros in the REPL, so let's include them:</p>
+</blockquote>
+<pre><code class="language-cl">lfe&gt; (include-lib &quot;moneta/include/macros.lfe&quot;)
+--loaded-moneta-macros--
+</code></pre>
+<blockquote>
 <p>Create a schema, asking Moneta to start the Mnesia database for you automatically:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:create-schema #(start true))
+<pre><code class="language-cl">lfe&gt; (mnta:create-schema #(start true))
 ok
+</code></pre>
+<blockquote>
+<p>Define a record for storing data:</p>
+</blockquote>
+<pre><code class="language-cl">lfe&gt; (defrecord funky a b c)
 </code></pre>
 <blockquote>
 <p>Now create a defaul table (with no provided table definition):</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:create-table 'funky)
+<pre><code class="language-cl">lfe&gt; (mnta:create-table 'funky $ENV)
 #(atomic ok)
-&gt;
 </code></pre>
 <p>From the LFE REPL you can create a new database on disk, start Mnesia
 up, and then create a table. After creating the table, you can examine the table's metadata.</p>
 <blockquote>
 <p>We can take a look at our creation with this command:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:info)
+<pre><code class="language-cl">&gt; (mnta:info)
 </code></pre>
 <blockquote>
 <p>Which should give you something like this:</p>
@@ -330,12 +323,12 @@ ok
 <blockquote>
 <p>Restart the LFE REPL using a new data directory:</p>
 </blockquote>
-<pre><code class="language-bash">$ lfe -mnesia dir '&quot;./Company.DB&quot;'
+<pre><code class="language-bash">$ rebar3 lfe repl
 </code></pre>
 <blockquote>
 <p>Create a default database schema:</p>
 </blockquote>
-<pre><code class="language-lisp">&gt; (mnt:create-schema #(start true))
+<pre><code class="language-lisp">lfe&gt; (mnta:create-schema #(start true))
 ok
 </code></pre>
 <p>We've had a quick taste of Mnesia, and what some of the calls look like in LFE.
@@ -376,15 +369,15 @@ Next we're going to tackle a bit more heady stuff: tables and relationships.</p>
 <blockquote>
 <p>Pull in these table definitions:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (include-file &quot;examples/tables.lfe&quot;)
+<pre><code class="language-cl">lfe&gt; (include-file &quot;examples/tables.lfe&quot;)
 loaded-example-tables
 </code></pre>
 <blockquote>
 <p>Define your tables:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (set set-tables '(employee department project in-department))
+<pre><code class="language-cl">lfe&gt; (set set-tables '(employee department project in-department))
 (employee department project in-department)
-&gt; (set bag-tables '(manager in-project))
+lfe&gt; (set bag-tables '(manager in-project))
 (manager in-project)
 </code></pre>
 <p>The <code>tables.lfe</code> example include defines LFE records that act as our table definitions (and thus all the convenient record macros that come with those). These are only definitions, though -- representing a table schema -- not the actual tables themselves. We need to create those.
@@ -397,21 +390,21 @@ as well as a macro that lets us create Mnesia tables with almost no boilerplate.
 <blockquote>
 <p>Create the tables with the appropriate table specs:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:create-tables set-tables '(#(type set)))
+<pre><code class="language-cl">lfe&gt; (mnta:create-tables set-tables '(#(type set)) $ENV)
 (#(atomic ok) #(atomic ok) #(atomic ok) #(atomic ok))
-&gt; (mnt:create-tables bag-tables '(#(type bag)))
+lfe&gt; (mnta:create-tables bag-tables '(#(type bag)) $ENV)
 (#(atomic ok) #(atomic ok))
 </code></pre>
 <blockquote>
 <p>This just created all our Mnesia tables for us. If we run it again, we'll see
 errors indicating that the tables have already been created:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:create-tables set-tables '(#(type set)))
+<pre><code class="language-cl">lfe&gt; (mnta:create-tables set-tables '(#(type set)))
 (#(aborted #(already_exists employee))
  #(aborted #(already_exists department))
  #(aborted #(already_exists project))
  #(aborted #(already_exists in-department)))
-&gt; (mnt:create-tables bag-tables '(#(type bag)))
+lfe&gt; (mnta:create-tables bag-tables '(#(type bag)))
 (#(aborted #(already_exists manager))
  #(aborted #(already_exists in-project)))
 </code></pre>
@@ -420,7 +413,7 @@ errors indicating that the tables have already been created:</p>
 <blockquote>
 <p>Next, let's re-run the <code>info</code> function we saw in the previous section:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:info)
+<pre><code class="language-cl">lfe&gt; (mnta:info)
 </code></pre>
 <pre><code>...
 ---&gt; Active tables &lt;---
@@ -435,23 +428,22 @@ employee       : with 0        records occupying 305      words of mem
 <blockquote>
 <p>Here's how you find what backend type is being used for any given table:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:table-info 'employee 'type)
+<pre><code class="language-cl">lfe&gt; (mnta:table-info 'employee 'type)
 set
-&gt; (mnt:table-info 'in-project 'type)
+lfe&gt; (mnta:table-info 'in-project 'type)
 bag
-&gt;
 </code></pre>
 <blockquote>
 <p>You can also get table metadata for several tables at once:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:tables-info (++ set-tables bag-tables) 'type)
+<pre><code class="language-cl">lfe&gt; (mnta:tables-info (++ set-tables bag-tables) 'type)
 (set set set set bag bag)
 </code></pre>
 <blockquote>
 <p>If you're interested in seeing <em>all</em> the details of any given table, you can
 do so with the <code>'all</code> parameter:</p>
 </blockquote>
-<pre><code class="language-cl">&gt; (mnt:table-info 'employee 'all)
+<pre><code class="language-cl">lfe&gt; (mnta:table-info 'employee 'all)
 (#(access_mode read_write)
 #(active_replicas (nonode@nohost))
 #(all_nodes (nonode@nohost))
@@ -508,6 +500,103 @@ previous section. However, do note that our new tables are reported in the
 <code>table-info</code> function to pull out certain data.</p>
 <p>Next up, we'll start inserting some data.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="content"><a class="header" href="#content">Content</a></h1>
+<p>We've created tables and we know how to inspect their metadata; now let's give them <em>data</em>. From the previous chapter, you should have the example records available to after including them:</p>
+<pre><code class="language-cl">lfe&gt; (include-file &quot;examples/tables.lfe&quot;)
+</code></pre>
+<h2 id="department-data"><a class="header" href="#department-data">Department Data</a></h2>
+<p>With those present (and the macros automatically created for us when those records were included), let's create a list of departments:</p>
+<pre><code class="language-cl">(set depts
+  (list
+    (make-department id 'B/SF name &quot;Open Telecom Platform&quot;)
+    (make-department id 'B/SFP name &quot;OTP - Product Development&quot;)
+    (make-department id 'B/SFR name &quot;Computer Science Laboratory&quot;)))
+</code></pre>
+<p>And then we can insert this data with the following:</p>
+<pre><code class="language-cl">lfe&gt; (mnta-qry:insert depts)
+ok
+</code></pre>
+<p>To see everything we just inserted, we can use a moneta convenience function:</p>
+<pre><code class="language-cl">lfe&gt; (set `#(atomic ,results) (mnta-qry:select-all 'department))
+</code></pre>
+<p>These results are department records, so we can iterate over them and use their record macros. For example:</p>
+<pre><code class="language-cl">(lists:map (lambda (r) (department-name r)) results) 
+</code></pre>
+<p>which gives:</p>
+<pre><code class="language-cl">(&quot;Open Telecom Platform&quot;
+ &quot;OTP - Product Development&quot;
+ &quot;Computer Science Laboratory&quot;)
+</code></pre>
+<h2 id="project-data"><a class="header" href="#project-data">Project Data</a></h2>
+<p>We can repeat this process for the following projects:</p>
+<pre><code class="language-cl">(set projs
+  (list
+    (make-project name 'erlang number 1)
+    (make-project name 'otp number 2)
+    (make-project name 'beam number 3)
+    (make-project name 'mnesia number 5)
+    (make-project name 'wolf number 6)
+    (make-project name 'documentation number 7)
+    (make-project name 'www number 8)))
+</code></pre>
+<pre><code class="language-cl">lfe&gt; (mnta-qry:insert projs)
+ok
+lfe&gt; (mnta-qry:select-all 'project)
+#(atomic
+  (#(project wolf 6)
+   #(project erlang 1)
+   #(project beam 3)
+   #(project otp 2)
+   #(project documentation 7)
+   #(project www 8)
+   #(project mnesia 5)))
+</code></pre>
+<h2 id="relationships"><a class="header" href="#relationships">Relationships</a></h2>
+<p>Next we'll explore the relational aspect of our data. First, let's create some employee records:</p>
+<pre><code class="language-cl">(set empls
+  (list
+    (make-employee id 1 name &quot;Johnson Torbjorn&quot; department-id 'B/SF
+                   projects '(otp))
+    (make-employee id 2 name &quot;Carlsson Tuula&quot; department-id 'B/SF
+                   projects '(otp))
+    (make-employee id 3 name &quot;Dacker Bjarne&quot; department-id 'B/SFR
+                   projects '(otp))
+    (make-employee id 4 name &quot;Nilsson Hans&quot; department-id 'B/SFR
+                   projects '(mnesia otp))
+    (make-employee id 5 name &quot;Tornkvist Torbjorn&quot; department-id 'B/SFR
+                   projects '(otp wolf))
+    (make-employee id 6 name &quot;Fedoriw Anna&quot; department-id 'B/SFR
+                   projects '(documentation otp))
+    (make-employee id 7 name &quot;Mattsson Hakan&quot; department-id 'B/SFR
+                   projects '(mnesia otp))))
+</code></pre>
+<p>Since we have relationships with other tables, we'll need to augment the employee insert operation. We can do that by providing a custom function that will be called inside the transaction:</p>
+<pre><code class="language-cl">(defun add-relations
+  (((match-employee id id department-id dept-id projects projs))
+   (mnesia:write (make-in-department employee-id id department-id dept-id))
+   (lists:map
+     (lambda (p)
+       (mnesia:write (make-in-project employee-id id project-name p)))
+     projs)))
+
+(defun insert-employee
+  (((= (match-employee id id department-id dept-id projects projs) record))
+   (mnesia:transaction
+    (lambda ()
+      (mnesia:write record)
+      (mnesia:write (make-in-department employee-id id department-id dept-id))
+      (lists:map
+       (lambda (p)
+         (mnesia:write (make-in-project employee-id id project-name p)))
+       projs)))))
+</code></pre>
+<p>We can then insert the employee data and create all the relations with this:</p>
+<pre><code class="language-cl">lfe&gt; (mnta-qry:insert empls #'add-relations/1)
+</code></pre>
+<p>And then use what we did before to check the inserts:</p>
+<pre><code class="language-cl">lfe&gt; (mnta-qry:select-all 'employee)
+lfe&gt; (mnta-qry:select-all 'in-department)
+lfe&gt; (mnta-qry:select-all 'in-project)
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="querying"><a class="header" href="#querying">Querying</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="previous-versions"><a class="header" href="#previous-versions">Previous Versions</a></h1>
 <p>Documentation is available for all previous releases:</p>
@@ -516,7 +605,7 @@ previous section. However, do note that our new tables are reported in the
 <li><a href="./v0.1.0/user-guide">0.1.0</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="license"><a class="header" href="#license">License</a></h1>
-<pre><code>Copyright &amp;copy; 2014-2023 Duncan McGreggor
+<pre><code>Copyright © 2014-2023 Duncan McGreggor
 
 Distributed under the Apache License, Version 2.0.
 </code></pre>
