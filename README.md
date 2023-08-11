@@ -1,14 +1,15 @@
 # moneta
 
-[![][moneta-logo]][moneta-logo-large]
-
-[moneta-logo]: priv/images/mnemosyne-y500.png
-[moneta-logo-large]: priv/images/mnemosyne-y2000.png
+[![Build Status][gh-actions-badge]][gh-actions]
+[![LFE Versions][lfe badge]][lfe]
+[![Erlang Versions][erlang badge]][versions]
+[![Tags][github tags badge]][github tags]
 
 *A Lispy wrapper for Erlang Mnesia and QLC*
 
+[![][logo]][logo-large]
 
-#### Contents
+##### Table of Contents
 
 * [Introduction](#introduction-)
 * [Documentation](#documentation-)
@@ -30,9 +31,7 @@ This project is mostly a wrapper around the Erlang/OTP ``mnesia`` and ``qlc`` mo
 
 Documentation for Moneta is available in the following forms:
 
-* [Moneta Tutorial](http://lfex.github.io/moneta/current/user-guide/)
-* [Moneta API Reference](http://lfex.github.io/moneta/current/api/)
-
+* [Moneta Tutorial](http://lfex.github.io/moneta/)
 
 ## Modules [&#x219F;](#contents)
 
@@ -61,7 +60,7 @@ Function names in the ``mnta*`` modules have the Erlang underscores replaced wit
 ## License [&#x219F;](#contents)
 
 ```
-Copyright © 2014-2016 Duncan McGreggor
+Copyright © 2016-2023 Duncan McGreggor
 
 Distributed under the Apache License, Version 2.0.
 ```
@@ -71,3 +70,16 @@ Original Mnesia documentation upon which the Moneta tutorial is based:
 ```
 Copyright © 1997-2016 Ericsson AB. All Rights Reserved.
 ```
+
+[//]: ---Named-Links---
+
+[gh-actions-badge]: https://github.com/lfex/moneta/workflows/ci%2Fcd/badge.svg
+[gh-actions]: https://github.com/lfex/moneta/actions
+[logo]: priv/images/mnemosyne-y500.png
+[logo-large]: priv/images/mnemosyne-y2000.png
+[lfe]: https://github.com/lfe/lfe
+[lfe badge]: https://img.shields.io/badge/lfe-2.1-blue.svg
+[erlang badge]: https://img.shields.io/badge/erlang-20%20to%2026-blue.svg
+[versions]: https://github.com/lfex/moneta/blob/master/.github/workflows/cicd.yml
+[github tags]: https://github.com/lfex/moneta/tags
+[github tags badge]: https://img.shields.io/github/tag/lfex/moneta.svg
