@@ -1,7 +1,9 @@
 (defmodule mnta
   (export all)
-  (export-macro create-table
-                create-tables))
+  ;;(export-macro create-table
+                ;;              create-tables
+    ;;            )
+  )
 
 (include-lib "lfe/include/clj.lfe")
 (include-lib "moneta/include/mnta.lfe")
@@ -71,16 +73,16 @@
 ;;        (++ ',table-defs
 ;;            (list (tuple 'attributes (lutil-rec:fields ',record-name))))))))
 
-(defun create-table-env (table-name env)
+(defun create-table (table-name env)
   "A function version of the create-table macro.
 
-  The same as ``(create-table-env table-name '() env)``.
+  The same as `(create-table table-name '() env)`.
 
   Note that since this function calls a table record macro, it requires
   access to the environment where the table macros were compiled."
-  (create-table-env table-name '() env))
+  (create-table table-name '() env))
 
-(defun create-table-env (table-name table-defs env)
+(defun create-table (table-name table-defs env)
   "A function version of the create-table macro.
 
   Note that since this function calls a table record macro, it requires
@@ -93,26 +95,31 @@
        (++ table-defs)
        (mnesia:create_table table-name)))
 
-(defun create-tables-env (table-names env)
-  "A function that creates tables of the same type in one go.
+(defun create-tables (table-names env)
+  (create-tables table-names '() env '()))
 
-  The same as ``(create-tables-env table-names '() env)``."
-  (create-tables-env table-names '() env))
+(defun create-tables (table-names table-defs env)
+  (create-tables table-names '() env '()))
 
-(defun create-tables-env (table-names table-defs env)
+(defun create-tables
   "A function that creates tables of the same type in one go."
-  (lists:map (lambda (x)
-               (mnta:create-table-env x table-defs env))
-             table-names))
+  (('() _ _ results)
+   results)
+  ((`(,table-name . ,tail-names) table-defs env acc)
+   (let ((results (case (create-table table-name table-defs env)
+                    ('ok (++ acc `#(ok ,table-name)))
+                    (err (++ acc (list err))))))
+     (create-tables tail-names table-defs env results))))
 
-(defmacro create-tables (table-names table-defs)
-  "A macro-version of the ``#create-tables-env/2,3`` that automatically
-  provides the executing environment."
-  `(mnta:create-tables-env ,table-names ,table-defs $ENV))
-
-(defun tables-info (table-names key)
+(defun tables-info (tables key)
   "Get table metadata for more than one table at once."
-  (lists:map (lambda (x) (mnta:table-info x key)) table-names))
+  (tables-info tables key '()))
+
+(defun tables-info
+  (('() _ results)
+   results)
+  ((`(,head . ,tail) key acc)
+   (tables-info tail key (++ acc (list (table-info head key))))))
 
 ;;; Metadata
 

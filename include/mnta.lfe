@@ -69,7 +69,7 @@
       (system-info 1)
       (table 1)
       (table-info 2)
-      (transaction 2)
+      (transaction 1) (transaction 2) (transaction 3)
       (transform-table 4) (transform-table 3)
       (traverse-backup 4)
       (uninstall-fallback 0) (uninstall-fallback 1)
@@ -84,7 +84,9 @@
   )
 
 (defmacro generate-api ()
-  `(progn ,@(kla:make-funcs (get-api-funcs) 'mnesia)))
+  `(progn
+     ,@(kla:make-funcs (get-api-funcs) 'mnesia)
+     '--generated-api--))
 
 (generate-api)
 
