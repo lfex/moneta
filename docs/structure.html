@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Structure - lanes</title>
+        <title>Structure - LFE Moneta/Mnesia Database Tutorial</title>
 
 
         <!-- Custom HTML head -->
@@ -112,7 +112,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">lanes</h1>
+                    <h1 class="menu-title">LFE Moneta/Mnesia Database Tutorial</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -167,10 +167,8 @@ Next we're going to tackle a bit more heady stuff: tables and relationships.</p>
 <pre><code class="language-cl">(defrecord employee
   id
   name
-  salary
-  gender
-  phone
-  room-number)
+  department-id
+  projects)
 
 (defrecord department
   id

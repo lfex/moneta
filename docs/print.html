@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>lanes</title>
+        <title>LFE Moneta/Mnesia Database Tutorial</title>
         <meta name="robots" content="noindex" />
 
 
@@ -113,7 +113,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">lanes</h1>
+                    <h1 class="menu-title">LFE Moneta/Mnesia Database Tutorial</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -298,21 +298,27 @@ up, and then create a table. After creating the table, you can examine the table
 ---&gt; Coordinator transactions &lt;---
 ---&gt; Uncertain transactions &lt;---
 ---&gt; Active tables &lt;---
-funky          : with 0        records occupying 317      words of mem
-schema         : with 2        records occupying 541      words of mem
-===&gt; System info in version &quot;4.8&quot;, debug level = none &lt;===
-opt_disc. Directory &quot;/tmp/funky&quot; is used.
+in-project     : with 11       records occupying 399      words of mem
+project        : with 7        records occupying 367      words of mem
+manager        : with 3        records occupying 335      words of mem
+employee       : with 7        records occupying 601      words of mem
+in-department  : with 7        records occupying 367      words of mem
+department     : with 3        records occupying 481      words of mem
+schema         : with 7        records occupying 1138     words of mem
+===&gt; System info in version &quot;4.22&quot;, debug level = none &lt;===
+opt_disc. Directory &quot;/Users/oubiwann/lab/lfe/moneta/Mnesia.nonode@nohost&quot; is used.
 use fallback at restart = false
 running db nodes   = [nonode@nohost]
 stopped db nodes   = []
 master node tables = []
 remote             = []
-ram_copies         = [funky]
-disc_copies        = [schema]
+ram_copies         = []
+disc_copies        = [department,employee,'in-department','in-project',
+                      manager,project,schema]
 disc_only_copies   = []
-[{nonode@nohost,disc_copies}] = [schema]
-[{nonode@nohost,ram_copies}] = [funky]
-3 transactions committed, 0 aborted, 0 restarted, 2 logged to disc
+[{nonode@nohost,disc_copies}] = [schema,department,'in-department',employee,
+                                 manager,project,'in-project']
+2 transactions committed, 0 aborted, 0 restarted, 0 logged to disc
 0 held locks, 0 in queue; 0 local transactions, 0 remote
 0 transactions waits for other nodes: []
 ok
@@ -341,10 +347,8 @@ Next we're going to tackle a bit more heady stuff: tables and relationships.</p>
 <pre><code class="language-cl">(defrecord employee
   id
   name
-  salary
-  gender
-  phone
-  room-number)
+  department-id
+  projects)
 
 (defrecord department
   id
@@ -655,7 +659,7 @@ ok
 <li><a href="https://github.com/lfe/lfe/blob/develop/doc/src/lfe_guide.7.md#query-list-comprehensions">The LFE qlc macro</a></li>
 </ul>
 <p>Let's rewrite our queries above using QLCs:</p>
-<pre><code class="language-cl">
+<pre><code class="language-cl">TBD
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="previous-versions"><a class="header" href="#previous-versions">Previous Versions</a></h1>
 <p>Documentation is available for all previous releases:</p>

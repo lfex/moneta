@@ -90,21 +90,27 @@ up, and then create a table. After creating the table, you can examine the table
 ---> Coordinator transactions <---
 ---> Uncertain transactions <---
 ---> Active tables <---
-funky          : with 0        records occupying 317      words of mem
-schema         : with 2        records occupying 541      words of mem
-===> System info in version "4.8", debug level = none <===
-opt_disc. Directory "/tmp/funky" is used.
+in-project     : with 11       records occupying 399      words of mem
+project        : with 7        records occupying 367      words of mem
+manager        : with 3        records occupying 335      words of mem
+employee       : with 7        records occupying 601      words of mem
+in-department  : with 7        records occupying 367      words of mem
+department     : with 3        records occupying 481      words of mem
+schema         : with 7        records occupying 1138     words of mem
+===> System info in version "4.22", debug level = none <===
+opt_disc. Directory "/Users/oubiwann/lab/lfe/moneta/Mnesia.nonode@nohost" is used.
 use fallback at restart = false
 running db nodes   = [nonode@nohost]
 stopped db nodes   = []
 master node tables = []
 remote             = []
-ram_copies         = [funky]
-disc_copies        = [schema]
+ram_copies         = []
+disc_copies        = [department,employee,'in-department','in-project',
+                      manager,project,schema]
 disc_only_copies   = []
-[{nonode@nohost,disc_copies}] = [schema]
-[{nonode@nohost,ram_copies}] = [funky]
-3 transactions committed, 0 aborted, 0 restarted, 2 logged to disc
+[{nonode@nohost,disc_copies}] = [schema,department,'in-department',employee,
+                                 manager,project,'in-project']
+2 transactions committed, 0 aborted, 0 restarted, 0 logged to disc
 0 held locks, 0 in queue; 0 local transactions, 0 remote
 0 transactions waits for other nodes: []
 ok

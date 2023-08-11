@@ -29,10 +29,8 @@ After you have quit from your previous LFE REPL, restart using the ``Company.DB`
 (defrecord employee
   id
   name
-  salary
-  gender
-  phone
-  room-number)
+  department-id
+  projects)
 
 (defrecord department
   id

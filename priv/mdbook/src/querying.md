@@ -60,5 +60,5 @@ The other way to query Mnesia is to use "query list comprehensions" which you ca
 Let's rewrite our queries above using QLCs:
 
 ``` cl
-
+TBD
 ```
