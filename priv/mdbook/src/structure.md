@@ -18,9 +18,6 @@ ok
 We've had a quick taste of Mnesia, and what some of the calls look like in LFE.
 Next we're going to tackle a bit more heady stuff: tables and relationships.
 
-After you have quit from your previous LFE REPL, restart using the ``Company.DB`` database name and then create a default schema, passing the auto-start option to Mnesia.
-
-
 ## Records as Tables
 
 > The following records are defined in ``examples/tables.lfe``:
@@ -104,7 +101,7 @@ lfe> (mnta:create-tables bag-tables '(#(type bag)))
  #(aborted #(already_exists in-project)))
 ```
 
-When using Mnesia directly, there is a great deal of boilerplate code that developers need to write in order to create tables. Fortunately, Moneta provides several macros and functions that does this for you, making table-creation as intuitive as possible:  all you need to do is provide table names and table specs.
+When using Mnesia directly, there is a great deal of boilerplate code that developers need to write in order to create tables. Fortunately, Moneta provides several functions that does this for you, making table-creation as intuitive as possible:  all you need to do is provide table names and table options.
 
 
 ## Table Metadata

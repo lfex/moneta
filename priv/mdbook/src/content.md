@@ -1,8 +1,9 @@
 # Content
 
-We've created tables and we know how to inspect their metadata; now let's give them *data*. From the previous chapter, you should have the example records available to after including them:
+We've created tables and we know how to inspect their metadata; now let's give them *data*. From the previous chapter, you should have mnesia running and the example records included:
 
 ``` cl
+lfe> (mnta:create-schema #(start true))
 lfe> (include-file "examples/tables.lfe")
 ```
 
